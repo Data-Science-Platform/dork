@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ -z "$SPARK_MASTER_ADDR" ] || [ -z "$SPARK_PORT_DRIVER" ] || [ -z "$SPARK_PORT_FILESERVER" ] || [ -z "$SPARK_PORT_BROADCAST" ] || [ -z "$SPARK_PORT_REPL_CLASS_SERVER" ] || [ -z "$SPARK_PORT_BLOCK_MANAGER" ] || [ -z "$SPARK_PORT_EXECUTOR" ] || [ -z "$SPARK_WORKER_PORT" ] || [ -z "$SPARK_WORKER_WEBUI_PORT" ] || [ -z "$SPARK_LOCAL_IP" ]
+then
+  echo "Please set all required environment variables."
+  exit 1
+fi
+
+export SPARK_WORKER_OPTS="-Dspark.driver.port=$SPARK_PORT_DRIVER \
+-Dspark.fileserver.port=$SPARK_PORT_FILESERVER \
+-Dspark.broadcast.port=$SPARK_PORT_BROADCAST \
+-Dspark.replClassServer.port=$SPARK_PORT_REPL_CLASS_SERVER \
+-Dspark.blockManager.port=$SPARK_PORT_BLOCK_MANAGER \
+-Dspark.executor.port=$SPARK_PORT_EXECUTOR \
+-Dspark.broadcast.factory=org.apache.spark.broadcast.HttpBroadcastFactory"
+
+echo "SPARK_WORKER_OPTS: $SPARK_WORKER_OPTS"
+
+exec $SPARK_HOME/bin/spark-class org.apache.spark.deploy.worker.Worker \
+    spark://$SPARK_MASTER_ADDR \
+    -h $SPARK_LOCAL_IP \
+    -p $SPARK_WORKER_PORT \
+    --webui-port $SPARK_WORKER_WEBUI_PORT \
+    "$@"
