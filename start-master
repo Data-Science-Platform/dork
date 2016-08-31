@@ -18,6 +18,9 @@ export SPARK_MASTER_OPTS="-Dspark.driver.port=$SPARK_PORT_DRIVER \
 
 echo "SPARK_MASTER_OPTS" $SPARK_MASTER_OPTS
 
+chown -R $SPARK_USER_NAME $SPARK_HOME
+chown -R $SPARK_GROUP_NAME $SPARK_HOME
+
 exec sudo -u $SPARK_USER_NAME $SPARK_HOME/bin/spark-class org.apache.spark.deploy.master.Master \
     --ip $SPARK_MASTER_IP \
     --port $SPARK_MASTER_PORT \
