@@ -1,10 +1,12 @@
 #!/bin/bash
 
-if [ -z "$SPARK_MASTER_ADDR" ] || [ -z "$SPARK_PORT_DRIVER" ] || [ -z "$SPARK_PORT_FILESERVER" ] || [ -z "$SPARK_PORT_BROADCAST" ] || [ -z "$SPARK_PORT_REPL_CLASS_SERVER" ] || [ -z "$SPARK_PORT_BLOCK_MANAGER" ] || [ -z "$SPARK_PORT_EXECUTOR" ] || [ -z "$SPARK_WORKER_PORT" ] || [ -z "$SPARK_WORKER_WEBUI_PORT" ] || [ -z "$SPARK_LOCAL_IP" ]
+if [ -z "$SPARK_MASTER_ADDR" ] || [ -z "$SPARK_PORT_DRIVER" ] || [ -z "$SPARK_PORT_FILESERVER" ] || [ -z "$SPARK_PORT_BROADCAST" ] || [ -z "$SPARK_PORT_REPL_CLASS_SERVER" ] || [ -z "$SPARK_PORT_BLOCK_MANAGER" ] || [ -z "$SPARK_PORT_EXECUTOR" ] || [ -z "$SPARK_WORKER_PORT" ] || [ -z "$SPARK_WORKER_WEBUI_PORT" ] || [ -z "$SPARK_LOCAL_IP" ] || [ -z "$SPARK_USER_NAME" ] || [ -z "$SPARK_USER_ID" ] || [ -z "$SPARK_GROUP_NAME" ] || [ -z "$SPARK_GROUP_ID" ]
 then
   echo "Please set all required environment variables."
   exit 1
 fi
+
+setup-users
 
 export SPARK_WORKER_OPTS="-Dspark.driver.port=$SPARK_PORT_DRIVER \
 -Dspark.fileserver.port=$SPARK_PORT_FILESERVER \
@@ -16,7 +18,7 @@ export SPARK_WORKER_OPTS="-Dspark.driver.port=$SPARK_PORT_DRIVER \
 
 echo "SPARK_WORKER_OPTS: $SPARK_WORKER_OPTS"
 
-exec $SPARK_HOME/bin/spark-class org.apache.spark.deploy.worker.Worker \
+exec sudo -u $SPARK_USER_NAME $SPARK_HOME/bin/spark-class org.apache.spark.deploy.worker.Worker \
     spark://$SPARK_MASTER_ADDR \
     -h $SPARK_LOCAL_IP \
     -p $SPARK_WORKER_PORT \

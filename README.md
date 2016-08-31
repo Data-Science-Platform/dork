@@ -21,6 +21,10 @@ sudo docker run --net host \
   -e SPARK_PORT_REPL_CLASS_SERVER=10003 \
   -e SPARK_PORT_BLOCK_MANAGER=10004 \
   -e SPARK_PORT_EXECUTOR=10005 \
+  -e SPARK_USER_NAME=spark \
+  -e SPARK_USER_ID=1100 \
+  -e SPARK_GROUP_NAME=spark \
+  -e SPARK_GROUP_ID=1100 \
   frosner/dork:latest start-master
 ```
 
@@ -39,5 +43,9 @@ sudo docker run --net host \
   -e SPARK_PORT_REPL_CLASS_SERVER=20003 \
   -e SPARK_PORT_BLOCK_MANAGER=20004 \
   -e SPARK_PORT_EXECUTOR=20005 \
+  -e SPARK_USER_NAME=spark \
+  -e SPARK_USER_ID=1100 \
+  -e SPARK_GROUP_NAME=spark \
+  -e SPARK_GROUP_ID=1100 \
   frosner/dork:latest start-worker
 ```
