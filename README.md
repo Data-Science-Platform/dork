@@ -2,7 +2,8 @@
 
 ## Description
 
-Spark docker image for deploying a standalone cluster.
+Spark Docker image for deploying a stand-alone cluster.
+There are [tags](https://hub.docker.com/r/frosner/dork/tags/) for different Spark versions available.
 
 ## Usage
 
