@@ -33,6 +33,8 @@ sudo docker run --net host \
 ```
 sudo docker run --net host \
   -v /etc/localtime:/etc/localtime:ro \
+  -e SPARK_WORKER_CORES=2 \
+  -e SPARK_WORKER_MEMORY=2g \
   -e SPARK_MASTER_ADDR=localhost:7077 \
   -e SPARK_WORKER_PORT=19999 \
   -e SPARK_WORKER_WEBUI_PORT=20000 \
