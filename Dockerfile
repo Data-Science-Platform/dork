@@ -8,8 +8,7 @@ RUN apt-get update \
 
 ENV SPARK_HOME /spark
 
-RUN curl -s http://www.apache.org/dist/spark/spark-2.0.0/spark-2.0.0-bin-hadoop2.6.tgz | tar -xz -C / \
-  && mv /spark-2.0.0-bin-hadoop2.6 /spark
+VOLUME /spark
 
 COPY start-worker /usr/bin
 COPY start-master /usr/bin
