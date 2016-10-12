@@ -13,6 +13,7 @@ There are [tags](https://hub.docker.com/r/frosner/dork/tags/) for different Spar
 sudo docker run --net host \
   -v $(pwd)/spark-2.0.0-bin-hadoop2.7:/spark \
   -v /etc/localtime:/etc/localtime:ro \
+  -v /etc/timezone:/etc/timezone:ro \
   -e SPARK_MASTER_IP=localhost \
   -e SPARK_MASTER_PORT=7077 \
   -e SPARK_MASTER_WEBUI_PORT=10000 \
@@ -35,6 +36,7 @@ sudo docker run --net host \
 ```
 sudo docker run -d --net host \
   -v /etc/localtime:/etc/localtime:ro \
+  -v /etc/timezone:/etc/timezone:ro \
   -v $(pwd)/spark-2.0.0-bin-hadoop2.7:/spark \
   -e SPARK_WORKER_CORES=2 \
   -e SPARK_WORKER_MEMORY=2g \
