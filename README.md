@@ -28,7 +28,7 @@ sudo docker run --net host \
   -e SPARK_USER_ID=1100 \
   -e SPARK_GROUP_NAME=spark \
   -e SPARK_GROUP_ID=1100 \
-  frosner/dork:latest start-master
+  frosner/dork start-master
 ```
 
 ### Starting a Worker
@@ -54,5 +54,24 @@ sudo docker run -d --net host \
   -e SPARK_USER_ID=1100 \
   -e SPARK_GROUP_NAME=spark \
   -e SPARK_GROUP_ID=1100 \
-  frosner/dork:latest start-worker
+  frosner/dork start-worker
+```
+
+### Submitting an Application
+
+```
+sudo docker run -d --net host \
+  --entrypoint spark-submit \
+  -v /etc/localtime:/etc/localtime:ro \
+  -v /etc/timezone:/etc/timezone:ro \
+  -v $(pwd)/spark-2.0.0-bin-hadoop2.7:/spark \
+  -e SPARK_USER_NAME=spark \
+  -e SPARK_USER_ID=1100 \
+  -e SPARK_GROUP_NAME=spark \
+  -e SPARK_GROUP_ID=1100 \
+  frosner/dork \
+  --class org.apache.spark.examples.SparkPi \
+  --master "local[*]" \
+  /path/to/examples.jar \
+  100
 ```

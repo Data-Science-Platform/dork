@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ -z "$SPARK_USER_NAME" ] || [ -z "$SPARK_USER_ID" ] || [ -z "$SPARK_GROUP_NAME" ] || [ -z "$SPARK_GROUP_ID" ]
+then
+  echo "Please set all required environment variables."
+  exit 1
+fi
+
+setup-users
+
+chown -R $SPARK_USER_NAME $SPARK_HOME
+chown -R $SPARK_GROUP_NAME $SPARK_HOME
+
+exec sudo -u $SPARK_USER_NAME $SPARK_HOME/bin/spark-submit $*

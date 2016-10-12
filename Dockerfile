@@ -10,9 +10,11 @@ ENV SPARK_HOME /spark
 
 VOLUME /spark
 
+COPY spark-submit /usr/bin
 COPY start-worker /usr/bin
 COPY start-master /usr/bin
 COPY setup-users /usr/bin
+RUN chmod u+x /usr/bin/spark-submit
 RUN chmod u+x /usr/bin/start-worker
 RUN chmod u+x /usr/bin/start-master
 RUN chmod u+x /usr/bin/setup-users
