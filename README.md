@@ -54,6 +54,8 @@ sudo docker run -d --net host \
   -e SPARK_USER_ID=1100 \
   -e SPARK_GROUP_NAME=spark \
   -e SPARK_GROUP_ID=1100 \
+  -e SPARK_SHUFFLE_SERVICE_ENABLED=true \
+  -e SPARK_SHUFFLE_SERVICE_PORT=7337 \
   frosner/dork start-worker
 ```
 
