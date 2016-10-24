@@ -21,7 +21,7 @@ echo "SPARK_WORKER_OPTS: $SPARK_WORKER_OPTS"
 chown -R $SPARK_USER_NAME $SPARK_HOME
 chown -R $SPARK_GROUP_NAME $SPARK_HOME
 
-exec sudo -u $SPARK_USER_NAME $SPARK_HOME/bin/spark-class org.apache.spark.deploy.worker.Worker \
+exec sudo -u -E $SPARK_USER_NAME $SPARK_HOME/bin/spark-class org.apache.spark.deploy.worker.Worker \
     spark://$SPARK_MASTER_ADDR \
     -h $SPARK_LOCAL_IP \
     -p $SPARK_WORKER_PORT \
