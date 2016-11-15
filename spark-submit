@@ -11,4 +11,4 @@ setup-users
 chown -R $SPARK_USER_NAME $SPARK_HOME
 chown -R $SPARK_GROUP_NAME $SPARK_HOME
 
-exec sudo -u $SPARK_USER_NAME $SPARK_HOME/bin/spark-submit $*
+exec sudo -E -u $SPARK_USER_NAME $SPARK_HOME/bin/spark-submit $*
