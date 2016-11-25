@@ -1,9 +1,12 @@
 # Dork
 
+[![Build Status](https://travis-ci.org/FRosner/dork.svg?branch=master)](https://travis-ci.org/FRosner/dork)
+[![Docker Pulls](https://img.shields.io/docker/pulls/frosner/dorkd.svg?maxAge=2592000)](https://hub.docker.com/r/frosner/dorkd/)
+
 ## Description
 
 Spark Docker image for deploying a stand-alone cluster.
-There are [tags](https://hub.docker.com/r/frosner/dork/tags/) for different Spark versions available.
+There are [tags](https://hub.docker.com/r/frosner/dorkd/tags/) for different Spark versions available.
 
 ## Usage
 
@@ -11,7 +14,6 @@ There are [tags](https://hub.docker.com/r/frosner/dork/tags/) for different Spar
 
 ```
 sudo docker run --net host \
-  -v $(pwd)/spark-2.0.0-bin-hadoop2.7:/spark \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/timezone:/etc/timezone:ro \
   -e SPARK_MASTER_IP=localhost \
@@ -28,7 +30,7 @@ sudo docker run --net host \
   -e SPARK_USER_ID=1100 \
   -e SPARK_GROUP_NAME=spark \
   -e SPARK_GROUP_ID=1100 \
-  frosner/dork start-master
+  frosner/dorkd:latest-s2.0.2-h2.7 start-master
 ```
 
 ### Starting a Worker
@@ -37,7 +39,6 @@ sudo docker run --net host \
 sudo docker run -d --net host \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/timezone:/etc/timezone:ro \
-  -v $(pwd)/spark-2.0.0-bin-hadoop2.7:/spark \
   -e SPARK_WORKER_CORES=2 \
   -e SPARK_WORKER_MEMORY=2g \
   -e SPARK_MASTER_ADDR=localhost:7077 \
@@ -56,7 +57,7 @@ sudo docker run -d --net host \
   -e SPARK_GROUP_ID=1100 \
   -e SPARK_SHUFFLE_SERVICE_ENABLED=true \
   -e SPARK_SHUFFLE_SERVICE_PORT=7337 \
-  frosner/dork start-worker
+  frosner/dork:latest-s2.0.2-h2.7 start-worker
 ```
 
 ### Submitting an Application
@@ -66,12 +67,11 @@ sudo docker run -d --net host \
   --entrypoint spark-submit \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/timezone:/etc/timezone:ro \
-  -v $(pwd)/spark-2.0.0-bin-hadoop2.7:/spark \
   -e SPARK_USER_NAME=spark \
   -e SPARK_USER_ID=1100 \
   -e SPARK_GROUP_NAME=spark \
   -e SPARK_GROUP_ID=1100 \
-  frosner/dork \
+  frosner/dork:latest-s2.0.2-h2.7 \
   --class org.apache.spark.examples.SparkPi \
   --master "local[*]" \
   /path/to/examples.jar \
