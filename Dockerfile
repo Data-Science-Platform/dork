@@ -30,10 +30,10 @@ ADD spark /spark
 
 ENV SPARK_HOME /spark
 
-COPY spark-submit /usr/bin
-COPY start-worker /usr/bin
-COPY start-master /usr/bin
-COPY setup-users /usr/bin
+COPY scripts/spark-submit /usr/bin
+COPY scripts/start-worker /usr/bin
+COPY scripts/start-master /usr/bin
+COPY scripts/setup-users /usr/bin
 RUN chmod u+x /usr/bin/spark-submit
 RUN chmod u+x /usr/bin/start-worker
 RUN chmod u+x /usr/bin/start-master
