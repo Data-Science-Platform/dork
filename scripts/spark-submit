@@ -8,13 +8,15 @@ fi
 
 setup-users
 
-mkdir /submit
+DIR_NAME=/submit.$$
 
-chown -R $SPARK_USER_NAME /submit
-chown -R $SPARK_GROUP_NAME /submit
+mkdir $DIR_NAME
+
+chown -R $SPARK_USER_NAME $DIR_NAME
+chown -R $SPARK_GROUP_NAME $DIR_NAME
 chown -R $SPARK_USER_NAME $SPARK_HOME
 chown -R $SPARK_GROUP_NAME $SPARK_HOME
 
-cd /submit
+cd $DIR_NAME
 
 exec sudo -E -u $SPARK_USER_NAME $SPARK_HOME/bin/spark-submit $*
