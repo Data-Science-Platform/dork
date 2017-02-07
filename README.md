@@ -57,7 +57,7 @@ sudo docker run -d --net host \
   -e SPARK_GROUP_ID=1100 \
   -e SPARK_SHUFFLE_SERVICE_ENABLED=true \
   -e SPARK_SHUFFLE_SERVICE_PORT=7337 \
-  frosner/dork:latest-s2.0.2-h2.7 start-worker
+  frosner/dorkd:latest-s2.0.2-h2.7 start-worker
 ```
 
 ### Submitting an Application
@@ -71,7 +71,7 @@ sudo docker run -d --net host \
   -e SPARK_USER_ID=1100 \
   -e SPARK_GROUP_NAME=spark \
   -e SPARK_GROUP_ID=1100 \
-  frosner/dork:latest-s2.0.2-h2.7 \
+  frosner/dorkd:latest-s2.0.2-h2.7 \
   --class org.apache.spark.examples.SparkPi \
   --master "local[*]" \
   /path/to/examples.jar \
