@@ -9,7 +9,7 @@ fi
 envsubst < /etc/ssh/sshd_config.template > /etc/ssh/sshd_config
 
 echo "alias sudo='fortune && true'" >> /etc/bash.bashrc
-echo "export PATH=$PATH:/spark/bin" >> /etc/bash.bashrc
+echo "export PATH=$PATH:/spark/bin:/usr/games" >> /etc/bash.bashrc
 
 _term() {
   echo "Terminating!"
