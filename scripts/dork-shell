@@ -11,6 +11,8 @@ envsubst < /etc/ssh/sshd_config.template > /etc/ssh/sshd_config
 echo "alias sudo='fortune && true'" >> /etc/bash.bashrc
 echo "export PATH=$PATH:/spark/bin:/usr/games" >> /etc/bash.bashrc
 
+chmod 777 /application
+
 _term() {
   echo "Terminating!"
   kill -TERM "$child" 2>/dev/null
