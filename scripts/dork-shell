@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -z "$LDAP_MATCH_GROUP" ]
+if [ -z "$LDAP_MATCH_GROUP" ] || [ -z "$DORK_SSH_PORT" ]
 then
   echo "Please set all required environment variables."
   exit 1
