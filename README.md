@@ -64,7 +64,7 @@ sudo docker run -d --net host \
 
 ```
 sudo docker run -d --net host \
-  --entrypoint spark-submit \
+  --entrypoint dork-submit \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/timezone:/etc/timezone:ro \
   -e SPARK_USER_NAME=spark \
@@ -76,4 +76,19 @@ sudo docker run -d --net host \
   --master "local[*]" \
   /path/to/examples.jar \
   100
+```
+
+### Providing a Spark SSH
+
+```
+sudo docker run -d -p 8022:22 \
+  --entrypoint dork-shell \
+  -v /etc/localtime:/etc/localtime:ro \
+  -v /etc/timezone:/etc/timezone:ro \
+  -v /etc/pam.d/common-session:/etc/pam.d/common-session:ro \
+  -v /etc/nsswitch.conf:/etc/nsswitch.conf:ro \
+  -v /etc/ldap.conf:/etc/ldap.conf:ro \
+  -v /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro \
+  -e LDAP_MATCH_GROUP=spark \
+  frosner/dorkd:latest-s.2.0.2-h2.7
 ```
