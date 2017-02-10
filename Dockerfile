@@ -1,9 +1,10 @@
-FROM openjdk:8-jre
+FROM ubuntu:14.04
 
 RUN \
   sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
   apt-get update && \
   apt-get install -y \
+    openjdk-7-jdk \
     curl \
     grep \
     sed \
@@ -16,25 +17,41 @@ RUN \
     libglib2.0-0 \
     libxext6 \
     libsm6 \
-    libxrender1 && \
+    fortune \
+    libxrender1 \
+    libnss-ldap ldap-utils \
+    openssh-server && \
   apt-get clean all
 
 RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
   wget --quiet https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh -O ~/anaconda.sh && \
   /bin/bash ~/anaconda.sh -b -p /opt/conda && \
   rm ~/anaconda.sh
+  
+RUN mkdir /var/run/sshd
+  
+ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 
-RUN ln -s /opt/conda/bin/python /usr/bin/python
+RUN rm -f /usr/bin/python && ln -s /opt/conda/bin/python /usr/bin/python
 
 ADD spark /spark
 
-ENV SPARK_HOME /spark
+RUN mkdir /application
+RUN chmod 777 /application
 
-COPY scripts/spark-submit /usr/bin
+ENV SPARK_HOME /spark
+ENV PATH $PATH:/spark/bin
+
+COPY conf/sshd_config.template /etc/ssh/sshd_config.template
+
+COPY scripts/dork-submit /usr/bin
+COPY scripts/dork-shell /usr/bin
 COPY scripts/start-worker /usr/bin
 COPY scripts/start-master /usr/bin
 COPY scripts/setup-users /usr/bin
-RUN chmod u+x /usr/bin/spark-submit
+
+RUN chmod u+x /usr/bin/dork-submit
+RUN chmod u+x /usr/bin/dork-shell
 RUN chmod u+x /usr/bin/start-worker
 RUN chmod u+x /usr/bin/start-master
 RUN chmod u+x /usr/bin/setup-users
