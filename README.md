@@ -19,6 +19,7 @@ sudo docker run --net host \
   -e SPARK_MASTER_IP=localhost \
   -e SPARK_MASTER_PORT=7077 \
   -e SPARK_MASTER_WEBUI_PORT=10000 \
+  -e SPARK_MASTER_RECOVERY_DIRECTORY=/master-recovery
   -e SPARK_LOCAL_IP=localhost \
   -e SPARK_PORT_DRIVER=10001 \
   -e SPARK_PORT_FILESERVER=10002 \
