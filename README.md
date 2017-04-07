@@ -19,6 +19,7 @@ sudo docker run --net host \
   -e SPARK_MASTER_IP=localhost \
   -e SPARK_MASTER_PORT=7077 \
   -e SPARK_MASTER_WEBUI_PORT=10000 \
+  -e SPARK_MASTER_RECOVERY_DIRECTORY=/master-recovery
   -e SPARK_LOCAL_IP=localhost \
   -e SPARK_PORT_DRIVER=10001 \
   -e SPARK_PORT_FILESERVER=10002 \
@@ -90,5 +91,5 @@ sudo docker run -d -p 8022:22 \
   -v /etc/ldap.conf:/etc/ldap.conf:ro \
   -v /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro \
   -e LDAP_MATCH_GROUP=spark \
-  frosner/dorkd:latest-s.2.0.2-h2.7
+  frosner/dorkd:latest-s2.0.2-h2.7
 ```
