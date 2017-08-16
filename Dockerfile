@@ -3,8 +3,11 @@ FROM ubuntu:14.04
 RUN \
   sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
   apt-get update && \
+  apt-get install -y software-properties-common && \
+  add-apt-repository ppa:openjdk-r/ppa && \
+  apt-get update && \
   apt-get install -y \
-    openjdk-7-jdk \
+    openjdk-8-jdk-headless \
     curl \
     grep \
     sed \
@@ -30,7 +33,7 @@ RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
   
 RUN mkdir /var/run/sshd
   
-ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 
 RUN rm -f /usr/bin/python && ln -s /opt/conda/bin/python /usr/bin/python
 
