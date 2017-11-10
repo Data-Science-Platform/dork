@@ -84,6 +84,7 @@ sudo docker run -d --net host \
 ```
 sudo docker run -d -p 8022:22 \
   --entrypoint dork-shell \
+  -v $(pwd)/ssh-keys:/ssh-keys \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/timezone:/etc/timezone:ro \
   -v /etc/pam.d/common-session:/etc/pam.d/common-session:ro \

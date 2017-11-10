@@ -30,7 +30,8 @@ PermitRootLogin no
 StrictModes no
 
 RSAAuthentication no
-PubkeyAuthentication no
+PubkeyAuthentication yes
+AuthorizedKeysFile /ssh-keys/%u/authorized_keys
 
 # Don't read the user's ~/.rhosts and ~/.shosts files
 IgnoreRhosts yes

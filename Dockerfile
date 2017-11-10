@@ -58,3 +58,5 @@ RUN chmod u+x /usr/bin/dork-shell
 RUN chmod u+x /usr/bin/start-worker
 RUN chmod u+x /usr/bin/start-master
 RUN chmod u+x /usr/bin/setup-users
+
+RUN mkdir /ssh-keys
