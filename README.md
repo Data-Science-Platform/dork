@@ -91,5 +91,6 @@ sudo docker run -d -p 8022:22 \
   -v /etc/ldap.conf:/etc/ldap.conf:ro \
   -v /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro \
   -e LDAP_MATCH_GROUP=spark \
+  -e DORK_SSH_PORT=22 \
   frosner/dorkd:latest-s2.0.2-h2.7
 ```
