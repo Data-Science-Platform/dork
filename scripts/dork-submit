@@ -12,6 +12,33 @@ APPLICATION_DIR=/submit.$$
 
 mkdir $APPLICATION_DIR
 
+if [[ $SPARK_APPLICATION_SOURCE ]] || [[ $SPARK_APPLICATION_TARGET ]]; then
+  if [[ -z $SPARK_APPLICATION_SOURCE ]] || [[ -z $SPARK_APPLICATION_TARGET ]]; then
+    echo 'If either $SPARK_APPLICATION_SOURCE or $SPARK_APPLICATION_TARGET is set, both must be set!'
+    exit 1
+  else
+    filename=$(basename "$SPARK_APPLICATION_SOURCE")
+    destination="$SPARK_APPLICATION_TARGET/$filename"
+    echo "Downloading $SPARK_APPLICATION_SOURCE to $destination"
+    mkdir -p "$SPARK_APPLICATION_TARGET"
+    if [[ "$SPARK_APPLICATION_USERNAME" ]] && [[ "$SPARK_APPLICATION_PASSWORD" ]]; then
+      wget --user="$SPARK_APPLICATION_USERNAME" --password="$SPARK_APPLICATION_PASSWORD" -P "$SPARK_APPLICATION_TARGET" "$SPARK_APPLICATION_SOURCE"
+    else
+      wget -P "$SPARK_APPLICATION_TARGET" "$SPARK_APPLICATION_SOURCE"
+    fi
+
+    cd "$SPARK_APPLICATION_TARGET"
+    if [[ "$filename" == *.tar.gz ]] || [[ "$filename" == *.tgz ]]; then
+      tar -xvzf $filename
+    elif [[ "$filename" == *.tar.bz2 ]] || [[ "$filename" == *.tbz2 ]]; then
+      tar -xvjf $filename
+    elif [[ "$filename" == *.tar ]]; then
+      tar -xvf $filename
+    fi
+    cd -
+  fi
+fi
+
 chown -R $SPARK_USER_NAME $APPLICATION_DIR
 chgrp -R $SPARK_GROUP_NAME $APPLICATION_DIR
 chown -R $SPARK_USER_NAME $SPARK_HOME
