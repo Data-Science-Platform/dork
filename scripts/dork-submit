@@ -46,4 +46,4 @@ chgrp -R $SPARK_GROUP_NAME $SPARK_HOME
 
 cd $SUBMIT_DIR
 
-exec sudo -E -u $SPARK_USER_NAME $SPARK_HOME/bin/spark-submit "$@"
+exec sudo -E -u $SPARK_USER_NAME $SPARK_HOME/bin/spark-submit $@
