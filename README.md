@@ -73,7 +73,7 @@ sudo docker run -d --net host \
   -e SPARK_GROUP_NAME=spark \
   -e SPARK_GROUP_ID=1100 \
   -e SPARK_APPLICATION_SOURCE="https://path-to-yo.ur/application.tar" \
-  -e SPARK_APPLICATION_TARGET="." \
+  -e SPARK_APPLICATION_TARGET="/application" \
   -e SPARK_APPLICATION_USERNAME="user" \
   -e SPARK_APPLICATION_PASSWORD="password" \
   frosner/dorkd:latest-s2.0.2-h2.7 \
