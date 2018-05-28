@@ -1,12 +1,12 @@
 # Dork
 
-[![Build Status](https://travis-ci.org/FRosner/dork.svg?branch=master)](https://travis-ci.org/FRosner/dork)
-[![Docker Pulls](https://img.shields.io/docker/pulls/frosner/dorkd.svg?maxAge=2592000)](https://hub.docker.com/r/frosner/dorkd/)
+[![Build Status](https://travis-ci.org/Data-Science-Platform/dork.svg?branch=master)](https://travis-ci.org/Data-Science-Platform/dork)
+[![Docker Pulls](https://img.shields.io/docker/pulls/datascienceplatform/dorkd.svg?maxAge=2592000)](https://hub.docker.com/r/datascienceplatform/dorkd/)
 
 ## Description
 
 Spark Docker image for deploying a stand-alone cluster.
-There are [tags](https://hub.docker.com/r/frosner/dorkd/tags/) for different Spark versions available.
+There are [tags](https://hub.docker.com/r/datascienceplatform/dorkd/tags/) for different Spark versions available.
 
 ## Usage
 
@@ -31,7 +31,7 @@ sudo docker run --net host \
   -e SPARK_USER_ID=1100 \
   -e SPARK_GROUP_NAME=spark \
   -e SPARK_GROUP_ID=1100 \
-  frosner/dorkd:latest-s2.0.2-h2.7 start-master
+  datascienceplatform/dorkd:latest-s2.0.2-h2.7 start-master
 ```
 
 ### Starting a Worker
@@ -58,7 +58,7 @@ sudo docker run -d --net host \
   -e SPARK_GROUP_ID=1100 \
   -e SPARK_SHUFFLE_SERVICE_ENABLED=true \
   -e SPARK_SHUFFLE_SERVICE_PORT=7337 \
-  frosner/dorkd:latest-s2.0.2-h2.7 start-worker
+  datascienceplatform/dorkd:latest-s2.0.2-h2.7 start-worker
 ```
 
 ### Submitting an Application
@@ -76,7 +76,7 @@ sudo docker run -d --net host \
   -e SPARK_APPLICATION_TARGET="/application" \
   -e SPARK_APPLICATION_USERNAME="user" \
   -e SPARK_APPLICATION_PASSWORD="password" \
-  frosner/dorkd:latest-s2.0.2-h2.7 \
+  datascienceplatform/dorkd:latest-s2.0.2-h2.7 \
   --class org.apache.spark.examples.SparkPi \
   --master "local[*]" \
   /path/to/examples.jar \
@@ -97,5 +97,5 @@ sudo docker run -d -p 8022:22 \
   -v /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro \
   -e LDAP_MATCH_GROUP=spark \
   -e DORK_SSH_PORT=22 \
-  frosner/dorkd:latest-s2.0.2-h2.7
+  datascienceplatform/dorkd:latest-s2.0.2-h2.7
 ```
