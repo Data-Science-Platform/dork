@@ -14,6 +14,8 @@ RUN \
     git \
     wget \
     bzip2 \
+    gzip \
+    zip unzip \
     gettext \
     sudo \
     ca-certificates \
