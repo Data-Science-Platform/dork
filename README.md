@@ -34,6 +34,8 @@ sudo docker run --net host \
   datascienceplatform/dorkd:latest-s2.0.2-h2.7 start-master
 ```
 
+To make use of Spark History server, add SPARK_EVENT_LOG_DIR variable
+
 ### Starting a Worker
 
 ```
