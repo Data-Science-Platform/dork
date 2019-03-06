@@ -18,6 +18,20 @@ export SPARK_WORKER_OPTS="-Dspark.driver.port=$SPARK_PORT_DRIVER \
 -Dspark.shuffle.service.enabled=$SPARK_SHUFFLE_SERVICE_ENABLED \
 -Dspark.shuffle.service.port=$SPARK_SHUFFLE_SERVICE_PORT"
 
+
+if [ "$SPARK_EVENT_LOG_DIR" ]
+then
+  if [ -d "$SPARK_EVENT_LOG_DIR" ]
+  then
+    echo "Configuring worker  to write logs to '$SPARK_EVENT_LOG_DIR'"
+    export SPARK_WORKER_OPTS="-Dspark.eventLog.enabled=true -Dspark.eventLog.dir=$SPARK_EVENT_LOG_DIR "$SPARK_WORKER_OPTS
+  else
+    echo "SPARK_EVENT_LOG_DIR=$SPARK_EVENT_LOG_DIR is defined but is not a directory"
+    exit 1
+  fi
+fi
+
+
 echo "SPARK_WORKER_OPTS: $SPARK_WORKER_OPTS"
 
 chown -R $SPARK_USER_NAME $SPARK_HOME
