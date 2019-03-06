@@ -31,10 +31,13 @@ sudo docker run --net host \
   -e SPARK_USER_ID=1100 \
   -e SPARK_GROUP_NAME=spark \
   -e SPARK_GROUP_ID=1100 \
+<<<<<<< HEAD
   datascienceplatform/dorkd:latest-s2.0.2-h2.7 start-master
+=======
+  -e SPARK_EVENT_LOG_DIR=/tmp/spark-events \
+  romanp/dorkd:latest-s2.0.2-h2.7 start-master
+>>>>>>> 308c72e... Update documnetation for History Server
 ```
-
-To make use of Spark History server, add SPARK_EVENT_LOG_DIR variable
 
 ### Starting a Worker
 
@@ -60,8 +63,31 @@ sudo docker run -d --net host \
   -e SPARK_GROUP_ID=1100 \
   -e SPARK_SHUFFLE_SERVICE_ENABLED=true \
   -e SPARK_SHUFFLE_SERVICE_PORT=7337 \
+  -e SPARK_EVENT_LOG_DIR=/tmp/spark-events \
   datascienceplatform/dorkd:latest-s2.0.2-h2.7 start-worker
 ```
+
+### Starting a History Server
+
+```
+sudo docker run -d --net host \
+  -v /etc/localtime:/etc/localtime:ro \
+  -v /etc/timezone:/etc/timezone:ro \
+  -e SPARK_EVENT_LOG_DIR=/tmp/spark-events \
+  -e SPARK_HISTORY_SERVER_PORT=18080 \
+  -e SPARK_HISTORY_SERVER_UPDATE_INTERVAL=10s \
+  -e SPARK_HISTORY_SERVER_MAXDISKUSAGE=10g \
+  -e SPARK_HISTORY_SERVER_MEMORY=1g \
+  -e SPARK_USER_NAME=spark \
+  -e SPARK_USER_ID=1100 \
+  -e SPARK_GROUP_NAME=spark \
+  -e SPARK_GROUP_ID=1100 \
+  romanp/dorkd:latest-s2.0.2-h2.7 start-history-server
+```
+### Disabling logs after the event
+
+By default, the after-the-event logs for Spark History server are stored under `$SPARK_EVENT_LOG_DIR`. If the variable is not specified, writing of the logs is omitted.
+
 
 ### Submitting an Application
 
