@@ -16,6 +16,7 @@ export SPARK_MASTER_OPTS="-Dspark.driver.port=$SPARK_PORT_DRIVER \
 -Dspark.executor.port=$SPARK_PORT_EXECUTOR \
 -Dspark.broadcast.factory=org.apache.spark.broadcast.HttpBroadcastFactory"
 
+
 if [ "$SPARK_MASTER_RECOVERY_DIRECTORY" ]
 then
   if [ -d "$SPARK_MASTER_RECOVERY_DIRECTORY" ]
@@ -32,11 +33,34 @@ fi
 echo "SPARK_MASTER_OPTS" $SPARK_MASTER_OPTS
 echo "SPARK_DAEMON_JAVA_OPTS" $SPARK_DAEMON_JAVA_OPTS
 
+
 chown -R $SPARK_USER_NAME $SPARK_HOME
 chgrp -R $SPARK_GROUP_NAME $SPARK_HOME
+
+# Configure and start Spark Hisotry server
+# Edit Spark master options to write event logs to
+if [ "$SPARK_EVENT_LOG_DIR" ]
+then
+  if [ -d "$SPARK_EVENT_LOG_DIR" ]
+  then
+    echo "Configuring master server to write logs to '$SPARK_EVENT_LOG_DIR'"
+    export SPARK_MASTER_OPTS="-Dspark.eventLog.enabled=true -Dspark.eventLog.dir=$SPARK_EVENT_LOG_DIR "$SPARK_MASTER_OPTS
+    export SPARK_HISTORY_OPTS="-Dspark.history.fs.logDirectory=$SPARK_EVENT_LOG_DIR"
+
+    chown -R $SPARK_USER_NAME:$SPARK_GROUP_NAME $SPARK_EVENT_LOG_DIR
+    exec sudo -E -u $SPARK_USER_NAME $SPARK_HOME/sbin/start-history-server.sh "$@" &
+    echo "Hisotry Server started with config'$SPARK_HISTORY_OPTS'"
+  else
+    echo "SPARK_EVENT_LOG_DIR=$SPARK_EVENT_LOG_DIR is defined but is not a directory"
+    exit 1
+  fi
+fi
+echo "SPARK_HISTORY_OPTS" $SPARK_HISTORY_OPTS
+
 
 exec sudo -E -u $SPARK_USER_NAME $SPARK_HOME/bin/spark-class org.apache.spark.deploy.master.Master \
     --ip $SPARK_MASTER_IP \
     --port $SPARK_MASTER_PORT \
     --webui-port $SPARK_MASTER_WEBUI_PORT \
     "$@"
+
