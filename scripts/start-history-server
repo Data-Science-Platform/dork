@@ -1,0 +1,32 @@
+#!/bin/bash
+
+if [ -z "$SPARK_USER_NAME" ] || [ -z "$SPARK_USER_ID" ] || [ -z "$SPARK_GROUP_NAME" ] || [ -z "$SPARK_GROUP_ID" ] || [ -z "$SPARK_EVENT_LOG_DIR" ]
+then
+  echo "Please set all required environment variables."
+  exit 1
+fi
+
+setup-users
+
+if [ "$SPARK_EVENT_LOG_DIR" ]
+then
+  if [ -d "$SPARK_EVENT_LOG_DIR" ]
+  then
+    echo "Configuring history server to read from '$SPARK_EVENT_LOG_DIR'"
+  else
+    echo "SPARK_EVENT_LOG_DIR=$SPARK_EVENT_LOG_DIR is defined but is not a directory"
+    exit 1
+  fi
+fi
+
+chown -R $SPARK_USER_NAME:$SPARK_GROUP_NAME $SPARK_HOME
+chown -R $SPARK_USER_NAME:$SPARK_GROUP_NAME $SPARK_EVENT_LOG_DIR
+
+export SPARK_HISTORY_OPTS="-Dspark.history.fs.logDirectory=$SPARK_EVENT_LOG_DIR"
+echo "SPARK_HISTORY_OPTS" $SPARK_HISTORY_OPTS
+
+. "${SPARK_HOME}/sbin/spark-config.sh"
+. "${SPARK_HOME}/bin/load-spark-env.sh"
+
+exec sudo -E -u $SPARK_USER_NAME $SPARK_HOME/bin/spark-class org.apache.spark.deploy.history.HistoryServer "$@"
+
