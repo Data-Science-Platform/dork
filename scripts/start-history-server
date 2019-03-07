@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -z "$SPARK_USER_NAME" ] || [ -z "$SPARK_USER_ID" ] || [ -z "$SPARK_GROUP_NAME" ] || [ -z "$SPARK_GROUP_ID" ] || [ -z "$SPARK_EVENT_LOG_DIR" ] || [ -z "$SPARK_HISTORY_SERVER_PORT" ] || [ -z "$SPARK_HISTORY_SERVER_UPDATE_INTERVAL" ] || [ -z "$SPARK_HISTORY_SERVER_MAXDISKUSAGE" ] || [ -z "$SPARK_HISTORY_SERVER_MEMORY" ]
+if [ -z "$SPARK_USER_NAME" ] || [ -z "$SPARK_USER_ID" ] || [ -z "$SPARK_GROUP_NAME" ] || [ -z "$SPARK_GROUP_ID" ] || [ -z "$SPARK_EVENT_LOG_DIR" ] || [ -z "$SPARK_HISTORY_SERVER_PORT" ] || [ -z "$SPARK_HISTORY_SERVER_UPDATE_INTERVAL" ] || [ -z "$SPARK_HISTORY_SERVER_MAX_DISK_USAGE" ]
 then
   echo "Please set all required environment variables."
   exit 1
@@ -22,11 +22,15 @@ fi
 chown -R $SPARK_USER_NAME:$SPARK_GROUP_NAME $SPARK_HOME
 chown -R $SPARK_USER_NAME:$SPARK_GROUP_NAME $SPARK_EVENT_LOG_DIR
 
-export SPARK_DAEMON_MEMORY=$SPARK_HISTORY_SERVER_MEMORY
 export SPARK_HISTORY_OPTS="-Dspark.history.fs.logDirectory=$SPARK_EVENT_LOG_DIR \
 -Dspark.history.fs.update.interval=$SPARK_HISTORY_SERVER_UPDATE_INTERVAL \
 -Dspark.history.ui.port=$SPARK_HISTORY_SERVER_PORT \
--Dspark.history.store.maxDiskUsage=$SPARK_HISTORY_SERVER_MAXDISKUSAGE"
+-Dspark.history.store.maxDiskUsage=$SPARK_HISTORY_SERVER_MAX_DISK_USAGE"
+
+if [ -n "$SPARK_HISTORY_SERVER_CLEANER_MAX_AGE" ]
+then
+   export SPARK_HISTORY_OPTS="-Dspark.history.fs.cleaner.enabled=true -Dspark.history.fs.cleaner.maxAge=$SPARK_HISTORY_SERVER_CLEANER_MAX_AGE "$SPARK_HISTORY_OPTS
+fi
 
 echo "SPARK_HISTORY_OPTS" $SPARK_HISTORY_OPTS
 
