@@ -36,7 +36,10 @@ then
   if [ -d "$SPARK_EVENT_LOG_DIR" ]
   then
     echo "Configuring master server to write logs to '$SPARK_EVENT_LOG_DIR'"
-    export SPARK_MASTER_OPTS="-Dspark.eventLog.enabled=true -Dspark.eventLog.dir=$SPARK_EVENT_LOG_DIR "$SPARK_MASTER_OPTS
+    export SPARK_DEFAULTS_FILE=$SPARK_HOME/conf/spark-defaults.conf
+    touch $SPARK_DEFAULTS_FILE
+    echo "spark.eventLog.enabled=true" >> $SPARK_DEFAULTS_FILE
+    echo "spark.eventLog.dir=$SPARK_EVENT_LOG_DIR" >> $SPARK_DEFAULTS_FILE
   else
     echo "SPARK_EVENT_LOG_DIR=$SPARK_EVENT_LOG_DIR is defined but is not a directory"
     exit 1
