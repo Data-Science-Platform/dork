@@ -8,11 +8,6 @@ fi
 
 setup-users
 
-if [ ! "$SPARK_EVENT_LOG_DIR" ]
-    echo "SPARK_EVENT_LOG_DIR is not defined "
-    exit 1
-fi
-
 chown -R $SPARK_USER_NAME:$SPARK_GROUP_NAME $SPARK_HOME
 chown -R $SPARK_USER_NAME:$SPARK_GROUP_NAME $SPARK_EVENT_LOG_DIR
 
