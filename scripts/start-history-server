@@ -8,15 +8,9 @@ fi
 
 setup-users
 
-if [ "$SPARK_EVENT_LOG_DIR" ]
-then
-  if [ -d "$SPARK_EVENT_LOG_DIR" ]
-  then
-    echo "Configuring history server to read from '$SPARK_EVENT_LOG_DIR'"
-  else
-    echo "SPARK_EVENT_LOG_DIR=$SPARK_EVENT_LOG_DIR is defined but is not a directory"
+if [ ! "$SPARK_EVENT_LOG_DIR" ]
+    echo "SPARK_EVENT_LOG_DIR is not defined "
     exit 1
-  fi
 fi
 
 chown -R $SPARK_USER_NAME:$SPARK_GROUP_NAME $SPARK_HOME
