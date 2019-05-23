@@ -23,7 +23,8 @@ export SPARK_WORKER_OPTS="-Dspark.driver.port=$SPARK_PORT_DRIVER \
 -Dspark.executor.port=$SPARK_PORT_EXECUTOR \
 -Dspark.broadcast.factory=org.apache.spark.broadcast.HttpBroadcastFactory \
 -Dspark.shuffle.service.enabled=$SPARK_SHUFFLE_SERVICE_ENABLED \
--Dspark.shuffle.service.port=$SPARK_SHUFFLE_SERVICE_PORT"
+-Dspark.shuffle.service.port=$SPARK_SHUFFLE_SERVICE_PORT \
+-Dspark.hadoop.fs.permissions.umask-mode=$SPARK_WORKER_UMASK"
 
 
 if [ "$SPARK_EVENT_LOG_DIR" ]
