@@ -19,8 +19,8 @@ after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   - export COMMIT=${TRAVIS_COMMIT::8}
   - export REPO=datascienceplatform/dorkd
-  - export NICE_BRANCH_NAME=$(echo $TRAVIS_BRANCH | sed -e 's/\//_/g')
-  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo "$NICE_BRANCH_NAME" ; fi`
+  - export NICE_BRANCH_NAME=`if [ $TRAVIS_PULL_REQUEST ]; then echo "PullRequest$TRAVIS_PULL_REQUEST"; else echo $(echo $TRAVIS_BRANCH | sed -e 's/\//_/g'); fi`
+  - export TAG=`if [ "$NICE_BRANCH_NAME" == "master" ]; then echo "latest"; else echo "$NICE_BRANCH_NAME" ; fi`
   - docker build -t $REPO:$COMMIT .
   - docker tag $REPO:$COMMIT $REPO:$TAG-s$SPARK_VERSION-h$HADOOP_VERSION
   - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER-s$SPARK_VERSION-h$HADOOP_VERSION
