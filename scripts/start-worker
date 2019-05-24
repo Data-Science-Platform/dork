@@ -1,7 +1,5 @@
 #!/bin/bash
 
-umask $SPARK_WORKER_UMASK
-
 echo "The umask is set to $(umask)"
 
 if [ -z "$SPARK_MASTER_ADDR" ] || [ -z "$SPARK_PORT_DRIVER" ] || [ -z "$SPARK_PORT_FILESERVER" ] || [ -z "$SPARK_PORT_BROADCAST" ] || [ -z "$SPARK_PORT_REPL_CLASS_SERVER" ] || [ -z "$SPARK_PORT_BLOCK_MANAGER" ] || [ -z "$SPARK_PORT_EXECUTOR" ] || [ -z "$SPARK_WORKER_PORT" ] || [ -z "$SPARK_WORKER_WEBUI_PORT" ] || [ -z "$SPARK_LOCAL_IP" ] || [ -z "$SPARK_USER_NAME" ] || [ -z "$SPARK_USER_ID" ] || [ -z "$SPARK_GROUP_NAME" ] || [ -z "$SPARK_GROUP_ID" ] || [ -z "$SPARK_WORKER_MEMORY" ] || [ -z "$SPARK_WORKER_CORES" ] || [ -z "$SPARK_SHUFFLE_SERVICE_ENABLED" ] || [ -z "$SPARK_SHUFFLE_SERVICE_PORT" ]
@@ -12,6 +10,10 @@ fi
 
 setup-users
 
+echo -e "\numask $SPARK_WORKER_UMASK\n" >> $SPARK_HOME/conf/spark-env.sh
+
+cat $SPARK_HOME/conf/spark-env.sh
+
 export SPARK_WORKER_OPTS="-Dspark.driver.port=$SPARK_PORT_DRIVER \
 -Dspark.fileserver.port=$SPARK_PORT_FILESERVER \
 -Dspark.broadcast.port=$SPARK_PORT_BROADCAST \
@@ -20,8 +22,7 @@ export SPARK_WORKER_OPTS="-Dspark.driver.port=$SPARK_PORT_DRIVER \
 -Dspark.executor.port=$SPARK_PORT_EXECUTOR \
 -Dspark.broadcast.factory=org.apache.spark.broadcast.HttpBroadcastFactory \
 -Dspark.shuffle.service.enabled=$SPARK_SHUFFLE_SERVICE_ENABLED \
--Dspark.shuffle.service.port=$SPARK_SHUFFLE_SERVICE_PORT \
--Dspark.hadoop.fs.permissions.umask-mode=$SPARK_WORKER_UMASK"
+-Dspark.shuffle.service.port=$SPARK_SHUFFLE_SERVICE_PORT"
 
 echo "SPARK_WORKER_OPTS: $SPARK_WORKER_OPTS"
 
