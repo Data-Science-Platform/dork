@@ -31,12 +31,8 @@ sudo docker run --net host \
   -e SPARK_USER_ID=1100 \
   -e SPARK_GROUP_NAME=spark \
   -e SPARK_GROUP_ID=1100 \
-<<<<<<< HEAD
-  datascienceplatform/dorkd:latest-s2.0.2-h2.7 start-master
-=======
   -e SPARK_EVENT_LOG_DIR=/tmp/spark-events \
-  romanp/dorkd:latest-s2.0.2-h2.7 start-master
->>>>>>> 308c72e... Update documnetation for History Server
+  datascienceplatform/dorkd:latest-s2.0.2-h2.7 start-master
 ```
 
 ### Starting a Worker
@@ -82,7 +78,7 @@ sudo docker run -d --net host \
   -e SPARK_USER_ID=1100 \
   -e SPARK_GROUP_NAME=spark \
   -e SPARK_GROUP_ID=1100 \
-  romanp/dorkd:latest-s2.0.2-h2.7 start-history-server
+  datascienceplatform/dorkd:latest-s2.0.2-h2.7 start-history-server
 ```
 ### Disabling logs after the event
 
