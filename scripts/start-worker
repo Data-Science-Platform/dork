@@ -8,6 +8,9 @@ fi
 
 setup-users
 
+# make sure local dir gets a 'file://' prefix
+if [[ $SPARK_EVENT_LOG_DIR == /* ]]; then SPARK_EVENT_LOG_DIR="file://${SPARK_EVENT_LOG_DIR}"; fi
+
 export SPARK_WORKER_OPTS="-Dspark.driver.port=$SPARK_PORT_DRIVER \
 -Dspark.fileserver.port=$SPARK_PORT_FILESERVER \
 -Dspark.broadcast.port=$SPARK_PORT_BROADCAST \
@@ -26,7 +29,6 @@ then
     touch $SPARK_DEFAULTS_FILE
     echo "spark.eventLog.enabled true" >> $SPARK_DEFAULTS_FILE
     echo "spark.eventLog.dir $SPARK_EVENT_LOG_DIR" >> $SPARK_DEFAULTS_FILE
-    echo "spark.history.fs.logDirectory $SPARK_EVENT_LOG_DIR" >> $SPARK_DEFAULTS_FILE
     chown -R $SPARK_USER_NAME:$SPARK_GROUP_NAME $SPARK_EVENT_LOG_DIR
 fi
 
