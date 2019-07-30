@@ -49,9 +49,9 @@ then
     chown -R "${SPARK_USER_NAME}":"${SPARK_GROUP_NAME}" "$SPARK_EVENT_LOG_DIR"
 
     # make sure local dir gets a 'file://' prefix
-    if [[ "${SPARK_EVENT_LOG_DIR}" == /* ]]; then SPARK_EVENT_LOG_DIR_PREFIXED="file://${SPARK_EVENT_LOG_DIR}"; fi
+    if [[ "${SPARK_EVENT_LOG_DIR}" == /* ]]; then SPARK_EVENT_LOG_DIR="file://${SPARK_EVENT_LOG_DIR}"; fi
 
-    export SPARK_MASTER_OPTS="${SPARK_MASTER_OPTS} -Dspark.eventLog.enabled=true -Dspark.eventLog.dir=${SPARK_EVENT_LOG_DIR_PREFIXED}"
+    export SPARK_MASTER_OPTS="${SPARK_MASTER_OPTS} -Dspark.eventLog.enabled=true -Dspark.eventLog.dir=${SPARK_EVENT_LOG_DIR}"
 else
     echo "skip history config"
 fi
