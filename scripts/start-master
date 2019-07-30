@@ -43,19 +43,6 @@ then
   fi
 fi
 
-echo "checking event log dir $SPARK_EVENT_LOG_DIR"
-if [ "${SPARK_EVENT_LOG_DIR}" ] && [ -d "${SPARK_EVENT_LOG_DIR}" ]
-then
-    chown -R "${SPARK_USER_NAME}":"${SPARK_GROUP_NAME}" "$SPARK_EVENT_LOG_DIR"
-
-    # make sure local dir gets a 'file://' prefix
-    if [[ "${SPARK_EVENT_LOG_DIR}" == /* ]]; then SPARK_EVENT_LOG_DIR="file://${SPARK_EVENT_LOG_DIR}"; fi
-
-    export SPARK_MASTER_OPTS="${SPARK_MASTER_OPTS} -Dspark.eventLog.enabled=true -Dspark.eventLog.dir=${SPARK_EVENT_LOG_DIR}"
-else
-    echo "skip history config"
-fi
-
 echo "using master opts: ${SPARK_MASTER_OPTS}"
 echo "using deamon java opts: ${SPARK_DAEMON_JAVA_OPTS}"
 

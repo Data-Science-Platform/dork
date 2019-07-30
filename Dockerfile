@@ -64,6 +64,3 @@ RUN chmod u+x /usr/bin/start-master
 RUN chmod u+x /usr/bin/setup-users
 
 RUN mkdir /ssh-keys
-
-ENV SPARK_EVENT_LOG_DIR /history-logs
-RUN mkdir $SPARK_EVENT_LOG_DIR
