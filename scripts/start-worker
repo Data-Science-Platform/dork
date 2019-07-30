@@ -24,7 +24,7 @@ export SPARK_WORKER_OPTS="${SPARK_WORKER_OPTS} -Dspark.driver.port=$SPARK_PORT_D
 -Dspark.shuffle.service.enabled=$SPARK_SHUFFLE_SERVICE_ENABLED \
 -Dspark.shuffle.service.port=$SPARK_SHUFFLE_SERVICE_PORT"
 
-
+echo "checking event log dir $SPARK_EVENT_LOG_DIR"
 if [ "${SPARK_EVENT_LOG_DIR}" ] && [ -d "${SPARK_EVENT_LOG_DIR}" ]
 then
     chown -R $SPARK_USER_NAME:$SPARK_GROUP_NAME $SPARK_EVENT_LOG_DIR

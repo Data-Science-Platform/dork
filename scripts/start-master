@@ -17,6 +17,7 @@ export SPARK_MASTER_OPTS="${SPARK_MASTER_OPTS} -Dspark.driver.port=$SPARK_PORT_D
 -Dspark.broadcast.factory=org.apache.spark.broadcast.HttpBroadcastFactory"
 
 
+echo "checking master recovery dir $SPARK_MASTER_RECOVERY_DIRECTORY"
 if [ "$SPARK_MASTER_RECOVERY_DIRECTORY" ]
 then
   if [ -d "$SPARK_MASTER_RECOVERY_DIRECTORY" ]
@@ -30,6 +31,7 @@ then
   fi
 fi
 
+echo "checking event log dir $SPARK_EVENT_LOG_DIR"
 if [ "${SPARK_EVENT_LOG_DIR}" ] && [ -d "${SPARK_EVENT_LOG_DIR}" ]
 then
     chown -R $SPARK_USER_NAME:$SPARK_GROUP_NAME $SPARK_EVENT_LOG_DIR
@@ -42,8 +44,8 @@ else
     echo "skip history config"
 fi
 
-echo "using master opts:" $SPARK_MASTER_OPTS
-echo "using deamon java opts:" $SPARK_DAEMON_JAVA_OPTS
+echo "using master opts: ${SPARK_MASTER_OPTS}"
+echo "using deamon java opts: ${SPARK_DAEMON_JAVA_OPTS}"
 
 chown -R "${SPARK_USER_NAME}":"${SPARK_GROUP_NAME}" $SPARK_HOME
 
