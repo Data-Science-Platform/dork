@@ -2,7 +2,24 @@
 
 echo "The umask is set to $(umask)"
 
-if [ -z "$SPARK_MASTER_ADDR" ] || [ -z "$SPARK_PORT_DRIVER" ] || [ -z "$SPARK_PORT_FILESERVER" ] || [ -z "$SPARK_PORT_BROADCAST" ] || [ -z "$SPARK_PORT_REPL_CLASS_SERVER" ] || [ -z "$SPARK_PORT_BLOCK_MANAGER" ] || [ -z "$SPARK_PORT_EXECUTOR" ] || [ -z "$SPARK_WORKER_PORT" ] || [ -z "$SPARK_WORKER_WEBUI_PORT" ] || [ -z "$SPARK_LOCAL_IP" ] || [ -z "$SPARK_USER_NAME" ] || [ -z "$SPARK_USER_ID" ] || [ -z "$SPARK_GROUP_NAME" ] || [ -z "$SPARK_GROUP_ID" ] || [ -z "$SPARK_WORKER_MEMORY" ] || [ -z "$SPARK_WORKER_CORES" ] || [ -z "$SPARK_SHUFFLE_SERVICE_ENABLED" ] || [ -z "$SPARK_SHUFFLE_SERVICE_PORT" ]
+if [ -z "$SPARK_MASTER_ADDR" ] \
+  || [ -z "$SPARK_PORT_DRIVER" ] \
+  || [ -z "$SPARK_PORT_FILESERVER" ] \
+  || [ -z "$SPARK_PORT_BROADCAST" ] \
+  || [ -z "$SPARK_PORT_REPL_CLASS_SERVER" ] \
+  || [ -z "$SPARK_PORT_BLOCK_MANAGER" ] \
+  || [ -z "$SPARK_PORT_EXECUTOR" ] \
+  || [ -z "$SPARK_WORKER_PORT" ] \
+  || [ -z "$SPARK_WORKER_WEBUI_PORT" ] \
+  || [ -z "$SPARK_LOCAL_IP" ] \
+  || [ -z "$SPARK_USER_NAME" ] \
+  || [ -z "$SPARK_USER_ID" ] \
+  || [ -z "$SPARK_GROUP_NAME" ] \
+  || [ -z "$SPARK_GROUP_ID" ] \
+  || [ -z "$SPARK_WORKER_MEMORY" ] \
+  || [ -z "$SPARK_WORKER_CORES" ] \
+  || [ -z "$SPARK_SHUFFLE_SERVICE_ENABLED" ] \
+  || [ -z "$SPARK_SHUFFLE_SERVICE_PORT" ]
 then
   echo "Please set all required environment variables."
   exit 1
@@ -10,9 +27,10 @@ fi
 
 setup-users
 
-echo -e "\numask $SPARK_WORKER_UMASK\n" >> $SPARK_HOME/conf/spark-env.sh
+echo "" >> "$SPARK_HOME"/conf/spark-env.sh
+echo "umask $SPARK_WORKER_UMASK" >> "$SPARK_HOME"/conf/spark-env.sh
 
-cat $SPARK_HOME/conf/spark-env.sh
+cat "$SPARK_HOME"/conf/spark-env.sh
 
 export SPARK_WORKER_OPTS="${SPARK_WORKER_OPTS} -Dspark.driver.port=$SPARK_PORT_DRIVER \
 -Dspark.fileserver.port=$SPARK_PORT_FILESERVER \
@@ -27,7 +45,7 @@ export SPARK_WORKER_OPTS="${SPARK_WORKER_OPTS} -Dspark.driver.port=$SPARK_PORT_D
 echo "checking event log dir $SPARK_EVENT_LOG_DIR"
 if [ "${SPARK_EVENT_LOG_DIR}" ] && [ -d "${SPARK_EVENT_LOG_DIR}" ]
 then
-    chown -R $SPARK_USER_NAME:$SPARK_GROUP_NAME $SPARK_EVENT_LOG_DIR
+    chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_EVENT_LOG_DIR"
 
     # make sure local dir gets a 'file://' prefix
     if [[ "${SPARK_EVENT_LOG_DIR}" == /* ]]; then SPARK_EVENT_LOG_DIR_PREFIXED="file://${SPARK_EVENT_LOG_DIR}"; fi
@@ -38,13 +56,13 @@ else
 fi
 
 echo "using worker opts: $SPARK_WORKER_OPTS"
-chown -R "${SPARK_USER_NAME}":"${SPARK_GROUP_NAME}" $SPARK_HOME
+chown -R "${SPARK_USER_NAME}":"${SPARK_GROUP_NAME}" "$SPARK_HOME"
 
-exec sudo -E -u $SPARK_USER_NAME $SPARK_HOME/bin/spark-class org.apache.spark.deploy.worker.Worker \
-    spark://$SPARK_MASTER_ADDR \
-    -h $SPARK_LOCAL_IP \
-    -p $SPARK_WORKER_PORT \
-    --memory $SPARK_WORKER_MEMORY \
-    --cores $SPARK_WORKER_CORES \
-    --webui-port $SPARK_WORKER_WEBUI_PORT \
+exec sudo -E -u "$SPARK_USER_NAME" "$SPARK_HOME"/bin/spark-class org.apache.spark.deploy.worker.Worker \
+    spark://"$SPARK_MASTER_ADDR" \
+    -h "$SPARK_LOCAL_IP" \
+    -p "$SPARK_WORKER_PORT" \
+    --memory "$SPARK_WORKER_MEMORY" \
+    --cores "$SPARK_WORKER_CORES" \
+    --webui-port "$SPARK_WORKER_WEBUI_PORT" \
     "$@"

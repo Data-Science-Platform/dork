@@ -1,6 +1,19 @@
 #!/bin/bash
 
-if [ -z "$SPARK_PORT_DRIVER" ] || [ -z "$SPARK_PORT_FILESERVER" ] || [ -z "$SPARK_PORT_BROADCAST" ] || [ -z "$SPARK_PORT_REPL_CLASS_SERVER" ] || [ -z "$SPARK_PORT_BLOCK_MANAGER" ] || [ -z "$SPARK_PORT_EXECUTOR" ] || [ -z "$SPARK_MASTER_IP" ] || [ -z "$SPARK_MASTER_PORT" ] || [ -z "$SPARK_MASTER_WEBUI_PORT" ] || [ -z "$SPARK_LOCAL_IP" ] || [ -z "$SPARK_USER_NAME" ] || [ -z "$SPARK_USER_ID" ] || [ -z "$SPARK_GROUP_NAME" ] || [ -z "$SPARK_GROUP_ID" ]
+if [ -z "$SPARK_PORT_DRIVER" ] \
+  || [ -z "$SPARK_PORT_FILESERVER" ] \
+  || [ -z "$SPARK_PORT_BROADCAST" ] \
+  || [ -z "$SPARK_PORT_REPL_CLASS_SERVER" ] \
+  || [ -z "$SPARK_PORT_BLOCK_MANAGER" ] \
+  || [ -z "$SPARK_PORT_EXECUTOR" ] \
+  || [ -z "$SPARK_MASTER_IP" ] \
+  || [ -z "$SPARK_MASTER_PORT" ] \
+  || [ -z "$SPARK_MASTER_WEBUI_PORT" ] \
+  || [ -z "$SPARK_LOCAL_IP" ] \
+  || [ -z "$SPARK_USER_NAME" ] \
+  || [ -z "$SPARK_USER_ID" ] \
+  || [ -z "$SPARK_GROUP_NAME" ] \
+  || [ -z "$SPARK_GROUP_ID" ]
 then
   echo "Please set all required environment variables."
   exit 1
@@ -17,16 +30,15 @@ export SPARK_MASTER_OPTS="${SPARK_MASTER_OPTS} -Dspark.driver.port=$SPARK_PORT_D
 -Dspark.broadcast.factory=org.apache.spark.broadcast.HttpBroadcastFactory"
 
 
-echo "checking master recovery dir $SPARK_MASTER_RECOVERY_DIRECTORY"
-if [ "$SPARK_MASTER_RECOVERY_DIRECTORY" ]
+echo "checking master recovery dir ${SPARK_MASTER_RECOVERY_DIRECTORY}"
+if [ "${SPARK_MASTER_RECOVERY_DIRECTORY}" ]
 then
-  if [ -d "$SPARK_MASTER_RECOVERY_DIRECTORY" ]
+  if [ -d "${SPARK_MASTER_RECOVERY_DIRECTORY}" ]
   then
-    export SPARK_DAEMON_JAVA_OPTS="-Dspark.deploy.recoveryMode=FILESYSTEM -Dspark.deploy.recoveryDirectory=$SPARK_MASTER_RECOVERY_DIRECTORY"
-    chown -R $SPARK_USER_NAME $SPARK_MASTER_RECOVERY_DIRECTORY
-    chgrp -R $SPARK_GROUP_NAME $SPARK_MASTER_RECOVERY_DIRECTORY
+    export SPARK_DAEMON_JAVA_OPTS="-Dspark.deploy.recoveryMode=FILESYSTEM -Dspark.deploy.recoveryDirectory=${SPARK_MASTER_RECOVERY_DIRECTORY}"
+    chown -R "${SPARK_USER_NAME}":"${SPARK_GROUP_NAME}" "${SPARK_MASTER_RECOVERY_DIRECTORY}"
   else
-    echo "SPARK_MASTER_RECOVERY_DIRECTORY=$SPARK_MASTER_RECOVERY_DIRECTORY is not a directory"
+    echo "SPARK_MASTER_RECOVERY_DIRECTORY=${SPARK_MASTER_RECOVERY_DIRECTORY} is not a directory"
     exit 1
   fi
 fi
@@ -34,7 +46,7 @@ fi
 echo "checking event log dir $SPARK_EVENT_LOG_DIR"
 if [ "${SPARK_EVENT_LOG_DIR}" ] && [ -d "${SPARK_EVENT_LOG_DIR}" ]
 then
-    chown -R $SPARK_USER_NAME:$SPARK_GROUP_NAME $SPARK_EVENT_LOG_DIR
+    chown -R "${SPARK_USER_NAME}":"${SPARK_GROUP_NAME}" "$SPARK_EVENT_LOG_DIR"
 
     # make sure local dir gets a 'file://' prefix
     if [[ "${SPARK_EVENT_LOG_DIR}" == /* ]]; then SPARK_EVENT_LOG_DIR_PREFIXED="file://${SPARK_EVENT_LOG_DIR}"; fi
@@ -47,11 +59,11 @@ fi
 echo "using master opts: ${SPARK_MASTER_OPTS}"
 echo "using deamon java opts: ${SPARK_DAEMON_JAVA_OPTS}"
 
-chown -R "${SPARK_USER_NAME}":"${SPARK_GROUP_NAME}" $SPARK_HOME
+chown -R "${SPARK_USER_NAME}":"${SPARK_GROUP_NAME}" "$SPARK_HOME"
 
-exec sudo -E -u $SPARK_USER_NAME $SPARK_HOME/bin/spark-class org.apache.spark.deploy.master.Master \
-    --ip $SPARK_MASTER_IP \
-    --port $SPARK_MASTER_PORT \
-    --webui-port $SPARK_MASTER_WEBUI_PORT \
+exec sudo -E -u "${SPARK_USER_NAME}" "$SPARK_HOME"/bin/spark-class org.apache.spark.deploy.master.Master \
+    --ip "$SPARK_MASTER_IP" \
+    --port "$SPARK_MASTER_PORT" \
+    --webui-port "$SPARK_MASTER_WEBUI_PORT" \
     "$@"
 
