@@ -51,12 +51,14 @@ COPY conf/sshd_config.template /etc/ssh/sshd_config.template
 
 COPY scripts/dork-submit /usr/bin
 COPY scripts/dork-shell /usr/bin
+COPY scripts/start-history-server /usr/bin
 COPY scripts/start-worker /usr/bin
 COPY scripts/start-master /usr/bin
 COPY scripts/setup-users /usr/bin
 
 RUN chmod u+x /usr/bin/dork-submit
 RUN chmod u+x /usr/bin/dork-shell
+RUN chmod u+x /usr/bin/start-history-server
 RUN chmod u+x /usr/bin/start-worker
 RUN chmod u+x /usr/bin/start-master
 RUN chmod u+x /usr/bin/setup-users
