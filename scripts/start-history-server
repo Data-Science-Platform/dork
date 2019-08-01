@@ -28,7 +28,6 @@ then
     if [[ "$SPARK_EVENT_LOG_DIR" == /* ]]; then SPARK_EVENT_LOG_DIR="file://$SPARK_EVENT_LOG_DIR"; fi
 
     export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS \
-    -Dspark.eventLog.enabled=true \
     -Dspark.history.fs.logDirectory=$SPARK_EVENT_LOG_DIR"
 else
     echo "skip history config"
