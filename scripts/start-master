@@ -21,7 +21,7 @@ fi
 
 setup-users
 
-export SPARK_MASTER_OPTS="$SPARK_MASTER_OPTS -Dspark.driver.port=$SPARK_PORT_DRIVER \
+export SPARK_MASTER_OPTS="-Dspark.driver.port=$SPARK_PORT_DRIVER \
 -Dspark.fileserver.port=$SPARK_PORT_FILESERVER \
 -Dspark.broadcast.port=$SPARK_PORT_BROADCAST \
 -Dspark.replClassServer.port=$SPARK_PORT_REPL_CLASS_SERVER \

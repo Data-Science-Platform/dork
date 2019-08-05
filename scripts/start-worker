@@ -30,7 +30,7 @@ setup-users
 echo "" >> "$SPARK_HOME"/conf/spark-env.sh
 echo "umask $SPARK_WORKER_UMASK" >> "$SPARK_HOME"/conf/spark-env.sh
 
-export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.driver.port=$SPARK_PORT_DRIVER \
+export SPARK_WORKER_OPTS="-Dspark.driver.port=$SPARK_PORT_DRIVER \
 -Dspark.fileserver.port=$SPARK_PORT_FILESERVER \
 -Dspark.broadcast.port=$SPARK_PORT_BROADCAST \
 -Dspark.replClassServer.port=$SPARK_PORT_REPL_CLASS_SERVER \
