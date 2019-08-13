@@ -30,6 +30,11 @@ setup-users
 echo "" >> "$SPARK_HOME"/conf/spark-env.sh
 echo "umask $SPARK_WORKER_UMASK" >> "$SPARK_HOME"/conf/spark-env.sh
 
+if [ -z "$SPARK_WORKER_CLEANUP_ENABLED" ]
+then
+  SPARK_WORKER_CLEANUP_ENABLED="true"
+fi
+
 export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.driver.port=$SPARK_PORT_DRIVER \
 -Dspark.fileserver.port=$SPARK_PORT_FILESERVER \
 -Dspark.broadcast.port=$SPARK_PORT_BROADCAST \
@@ -38,7 +43,8 @@ export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.driver.port=$SPARK_PORT_DRI
 -Dspark.executor.port=$SPARK_PORT_EXECUTOR \
 -Dspark.broadcast.factory=org.apache.spark.broadcast.HttpBroadcastFactory \
 -Dspark.shuffle.service.enabled=$SPARK_SHUFFLE_SERVICE_ENABLED \
--Dspark.shuffle.service.port=$SPARK_SHUFFLE_SERVICE_PORT"
+-Dspark.shuffle.service.port=$SPARK_SHUFFLE_SERVICE_PORT \
+-Dspark.worker.cleanup.enabled=$SPARK_WORKER_CLEANUP_ENABLED"
 
 echo "checking event log dir $SPARK_EVENT_LOG_DIR"
 if [ "$SPARK_EVENT_LOG_DIR" ] && [ -d "$SPARK_EVENT_LOG_DIR" ]
