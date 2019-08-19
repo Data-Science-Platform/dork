@@ -30,11 +30,6 @@ setup-users
 echo "" >> "$SPARK_HOME"/conf/spark-env.sh
 echo "umask $SPARK_WORKER_UMASK" >> "$SPARK_HOME"/conf/spark-env.sh
 
-if [ -z "$SPARK_WORKER_CLEANUP_ENABLED" ]
-then
-  SPARK_WORKER_CLEANUP_ENABLED="true"
-fi
-
 export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.driver.port=$SPARK_PORT_DRIVER \
 -Dspark.fileserver.port=$SPARK_PORT_FILESERVER \
 -Dspark.broadcast.port=$SPARK_PORT_BROADCAST \
@@ -43,8 +38,7 @@ export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.driver.port=$SPARK_PORT_DRI
 -Dspark.executor.port=$SPARK_PORT_EXECUTOR \
 -Dspark.broadcast.factory=org.apache.spark.broadcast.HttpBroadcastFactory \
 -Dspark.shuffle.service.enabled=$SPARK_SHUFFLE_SERVICE_ENABLED \
--Dspark.shuffle.service.port=$SPARK_SHUFFLE_SERVICE_PORT \
--Dspark.worker.cleanup.enabled=$SPARK_WORKER_CLEANUP_ENABLED"
+-Dspark.shuffle.service.port=$SPARK_SHUFFLE_SERVICE_PORT"
 
 echo "checking event log dir $SPARK_EVENT_LOG_DIR"
 if [ "$SPARK_EVENT_LOG_DIR" ] && [ -d "$SPARK_EVENT_LOG_DIR" ]
@@ -57,6 +51,20 @@ then
     export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.eventLog.enabled=true -Dspark.eventLog.dir=$SPARK_EVENT_LOG_DIR"
 else
     echo "skip history config"
+fi
+
+echo "checking worker cleanup parameter $SPARK_WORKER_CLEANUP_ENABLED"
+if [ "$SPARK_WORKER_CLEANUP_ENABLED" == "true" ]
+then
+    export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.worker.cleanup.enabled=true"
+    if [ "$SPARK_WORKER_CLEANUP_INTERVAL" ]
+    then
+        export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.worker.cleanup.interval=$SPARK_WORKER_CLEANUP_INTERVAL"
+    fi
+    if [ "$SPARK_WORKER_CLEANUP_APPDATATTL" ]
+    then
+        export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.worker.cleanup.appDataTtl=$SPARK_WORKER_CLEANUP_APPDATATTL"
+    fi
 fi
 
 echo "using worker opts: $SPARK_WORKER_OPTS"
