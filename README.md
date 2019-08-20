@@ -60,6 +60,9 @@ sudo docker run -d --net host \
   -e SPARK_SHUFFLE_SERVICE_ENABLED=true \
   -e SPARK_SHUFFLE_SERVICE_PORT=7337 \
   -e SPARK_EVENT_LOG_DIR=/tmp/spark-events \
+  -e $SPARK_WORKER_CLEANUP_ENABLED=true \
+  -e $SPARK_WORKER_CLEANUP_INTERVAL=1800 \
+  -e $SPARK_WORKER_CLEANUP_APPDATATTL=604800 \
   datascienceplatform/dorkd:latest-s2.0.2-h2.7 start-worker
 ```
 

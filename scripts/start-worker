@@ -53,6 +53,20 @@ else
     echo "skip history config"
 fi
 
+echo "checking worker cleanup parameter $SPARK_WORKER_CLEANUP_ENABLED"
+if [ "$SPARK_WORKER_CLEANUP_ENABLED" == "true" ]
+then
+    export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.worker.cleanup.enabled=true"
+    if [ "$SPARK_WORKER_CLEANUP_INTERVAL" ]
+    then
+        export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.worker.cleanup.interval=$SPARK_WORKER_CLEANUP_INTERVAL"
+    fi
+    if [ "$SPARK_WORKER_CLEANUP_APPDATATTL" ]
+    then
+        export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.worker.cleanup.appDataTtl=$SPARK_WORKER_CLEANUP_APPDATATTL"
+    fi
+fi
+
 echo "using worker opts: $SPARK_WORKER_OPTS"
 chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_HOME"
 
