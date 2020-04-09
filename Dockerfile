@@ -5,6 +5,7 @@ RUN \
   apt-get update && \
   apt-get install -y software-properties-common && \
   add-apt-repository ppa:openjdk-r/ppa && \
+  add-apt-repository ppa:lokkju/java-compat && \
   apt-get update && \
   apt-get install -y \
     openjdk-8-jdk-headless \
@@ -25,6 +26,7 @@ RUN \
     fortune \
     libxrender1 \
     libnss-ldap ldap-utils \
+    libjline2-java \
     openssh-server && \
   apt-get clean all
 
