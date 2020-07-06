@@ -25,6 +25,7 @@ RUN \
     fortune \
     libxrender1 \
     libnss-ldap ldap-utils \
+    mailutils \
     openssh-server && \
   apt-get clean all
 
