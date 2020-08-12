@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "The umask is set to $(umask)"
+echo "The default umask is $(umask)"
 
 if [ -z "$SPARK_MASTER_ADDR" ] \
   || [ -z "$SPARK_PORT_DRIVER" ] \
@@ -28,6 +28,7 @@ fi
 setup-users
 
 echo "" >> "$SPARK_HOME"/conf/spark-env.sh
+echo "setting umask to ${SPARK_WORKER_UMASK}"
 echo "umask $SPARK_WORKER_UMASK" >> "$SPARK_HOME"/conf/spark-env.sh
 
 export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.driver.port=$SPARK_PORT_DRIVER \
