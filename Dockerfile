@@ -1,4 +1,7 @@
-FROM ubuntu:14.04
+FROM ubuntu:18.04
+
+ENV LANG "C.UTF-8"
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN \
   sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
