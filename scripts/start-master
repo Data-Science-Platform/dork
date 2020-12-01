@@ -27,7 +27,9 @@ export SPARK_MASTER_OPTS="$SPARK_MASTER_OPTS -Dspark.driver.port=$SPARK_PORT_DRI
 -Dspark.replClassServer.port=$SPARK_PORT_REPL_CLASS_SERVER \
 -Dspark.blockManager.port=$SPARK_PORT_BLOCK_MANAGER \
 -Dspark.executor.port=$SPARK_PORT_EXECUTOR \
--Dspark.broadcast.factory=org.apache.spark.broadcast.HttpBroadcastFactory"
+-Dspark.broadcast.factory=org.apache.spark.broadcast.HttpBroadcastFactory \
+-XX:+UseG1GC \
+-XX:MaxGCPauseMillis=1000"
 
 
 echo "checking master recovery dir $SPARK_MASTER_RECOVERY_DIRECTORY"
