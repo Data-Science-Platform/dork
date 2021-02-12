@@ -1,0 +1,49 @@
+#!/bin/bash
+
+if [ -z "$SPARK_USER_NAME" ] \
+  || [ -z "$SPARK_USER_ID" ] \
+  || [ -z "$SPARK_GROUP_NAME" ] \
+  || [ -z "$SPARK_GROUP_ID" ] \
+  || [ -z "$SPARK_EVENT_LOG_DIR" ] \
+  || [ -z "$SPARK_HISTORY_SERVER_PORT" ] \
+  || [ -z "$SPARK_HISTORY_SERVER_UPDATE_INTERVAL" ] \
+  || [ -z "$SPARK_HISTORY_SERVER_MAX_DISK_USAGE" ]
+then
+  echo "Please set all required environment variables."
+  exit 1
+fi
+
+setup-users
+
+export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS \
+-Dspark.history.fs.update.interval=$SPARK_HISTORY_SERVER_UPDATE_INTERVAL \
+-Dspark.history.ui.port=$SPARK_HISTORY_SERVER_PORT \
+-Dspark.history.store.maxDiskUsage=$SPARK_HISTORY_SERVER_MAX_DISK_USAGE \
+-XX:+UseG1GC \
+-XX:MaxGCPauseMillis=1000"
+
+if [ "$SPARK_EVENT_LOG_DIR" ] && [ -d "$SPARK_EVENT_LOG_DIR" ]
+then
+    chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_EVENT_LOG_DIR"
+
+    # make sure local dir gets a 'file://' prefix
+    if [[ "$SPARK_EVENT_LOG_DIR" == /* ]]; then SPARK_EVENT_LOG_DIR="file://$SPARK_EVENT_LOG_DIR"; fi
+
+    export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS \
+    -Dspark.history.fs.logDirectory=$SPARK_EVENT_LOG_DIR"
+else
+    echo "skip history config"
+fi
+
+if [ -n "$SPARK_HISTORY_SERVER_CLEANER_MAX_AGE" ]
+then
+   export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS \
+   -Dspark.history.fs.cleaner.enabled=true \
+   -Dspark.history.fs.cleaner.maxAge=$SPARK_HISTORY_SERVER_CLEANER_MAX_AGE"
+fi
+
+echo "using history opts: $SPARK_HISTORY_OPTS"
+
+chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_HOME"
+
+exec sudo -E -u "$SPARK_USER_NAME" "$SPARK_HOME"/bin/spark-class org.apache.spark.deploy.history.HistoryServer "$@"
