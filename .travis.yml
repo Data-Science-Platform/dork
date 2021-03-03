@@ -1,0 +1,34 @@
+language: java
+sudo: required
+services:
+  - docker
+jdk:
+  - openjdk8
+
+env:
+  matrix:
+    - SPARK_VERSION=2.0.2 HADOOP_VERSION=2.7
+    - SPARK_VERSION=2.1.1 HADOOP_VERSION=2.7
+    - SPARK_VERSION=2.2.0 HADOOP_VERSION=2.7
+    - SPARK_VERSION=2.2.2 HADOOP_VERSION=2.7
+    - SPARK_VERSION=2.4.3 HADOOP_VERSION=2.7
+    - SPARK_VERSION=2.4.4 HADOOP_VERSION=2.7
+    - SPARK_VERSION=2.4.5 HADOOP_VERSION=2.7
+    - SPARK_VERSION=2.4.6 HADOOP_VERSION=2.7
+    - SPARK_VERSION=2.4.7 HADOOP_VERSION=2.7
+    - SPARK_VERSION=3.0.0 HADOOP_VERSION=3.2
+
+script:
+  - ./build $SPARK_VERSION $HADOOP_VERSION
+
+after_success:
+  - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+  - export COMMIT=${TRAVIS_COMMIT::8}
+  - export REPO=datascienceplatform/dorkd
+  - export NICE_BRANCH_NAME=`if [ $TRAVIS_PULL_REQUEST == "false" ]; then echo $(echo $TRAVIS_BRANCH | sed -e 's/\//_/g'); else echo "PullRequest_$TRAVIS_PULL_REQUEST"; fi`
+  - export TAG=`if [ "$NICE_BRANCH_NAME" == "master" ]; then echo "latest"; else echo "$NICE_BRANCH_NAME" ; fi`
+  - docker build -t $REPO:$COMMIT .
+  - docker tag $REPO:$COMMIT $REPO:$TAG-s$SPARK_VERSION-h$HADOOP_VERSION
+  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER-s$SPARK_VERSION-h$HADOOP_VERSION
+  - docker tag $REPO:$COMMIT $REPO:$COMMIT-s$SPARK_VERSION-h$HADOOP_VERSION
+  - docker push $REPO
