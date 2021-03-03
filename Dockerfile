@@ -33,12 +33,12 @@ RUN \
   apt-get clean all
 
 RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
-  wget --quiet https://repo.continuum.io/archive/Anaconda3-4.2.0-Linux-x86_64.sh -O ~/anaconda.sh && \
+  wget --quiet https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh -O ~/anaconda.sh && \
   /bin/bash ~/anaconda.sh -b -p /opt/conda && \
   rm ~/anaconda.sh
-  
+
 RUN mkdir /var/run/sshd
-  
+
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 
 RUN rm -f /usr/bin/python && ln -s /opt/conda/bin/python /usr/bin/python
