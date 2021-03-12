@@ -3,12 +3,12 @@ FROM internal.docker.gda.allianz/bionic-20210222-non-root:jre8-anaconda3-2020.11
 ENV LANG "C.UTF-8"
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN mkdir -p /var/run/sshd
+RUN sudo mkdir -p /var/run/sshd
 
 ADD spark /spark
 
-RUN mkdir /application
-RUN chmod 777 /application
+RUN sudo mkdir /application
+RUN sudo chmod 777 /application
 
 ENV SPARK_HOME /spark
 ENV PATH $PATH:/spark/bin
@@ -22,11 +22,11 @@ COPY scripts/start-worker /usr/bin
 COPY scripts/start-master /usr/bin
 COPY scripts/setup-users /usr/bin
 
-RUN chmod u+x /usr/bin/dork-submit
-RUN chmod u+x /usr/bin/dork-shell
-RUN chmod u+x /usr/bin/start-history-server
-RUN chmod u+x /usr/bin/start-worker
-RUN chmod u+x /usr/bin/start-master
-RUN chmod u+x /usr/bin/setup-users
+RUN sudo chmod u+x /usr/bin/dork-submit
+RUN sudo chmod u+x /usr/bin/dork-shell
+RUN sudo chmod u+x /usr/bin/start-history-server
+RUN sudo chmod u+x /usr/bin/start-worker
+RUN sudo chmod u+x /usr/bin/start-master
+RUN sudo chmod u+x /usr/bin/setup-users
 
 RUN mkdir /ssh-keys
