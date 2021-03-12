@@ -15,7 +15,7 @@ stages:
     - echo "${BASHRC}" > ~/.bashrc
     - export CONTAINER_TAG="internal.docker.gda.allianz/dork:${COMMIT}"
     - ./build $SPARK_VERSION $HADOOP_VERSION
-    - sudo ./build docker --repo=internal.docker.gda.allianz/dorkd --commit=$COMMIT
+    - sudo docker build . -t $CONTAINER_TAG --file Dockerfile
     - sudo docker tag $CONTAINER_TAG $CONTAINER_TAG-s$SPARK_VERSION-h$HADOOP_VERSION
     - sudo docker push $CONTAINER_TAG-s$SPARK_VERSION-h$HADOOP_VERSION
 

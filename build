@@ -9,4 +9,5 @@ export HTTP_PROXY="http://proxy02.gda.allianz:3128"
 export HTTPS_PROXY="http://proxy02.gda.allianz:3128"
 
 curl -s http://archive.apache.org/dist/spark/spark-$spark_version/spark-$spark_version-bin-hadoop$hadoop_version.tgz | tar -xz -C .
+
 mv spark-* spark
