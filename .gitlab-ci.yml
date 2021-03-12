@@ -9,7 +9,6 @@ stages:
 
 .build_template: &build_env
   script:
-
 	  - set -eu
     - echo $DOCKER_CFG > ~/.dockercfg
     - export COMMIT="${CI_BUILD_REF:0:8}"
@@ -25,14 +24,14 @@ stages:
 #
 
 build_spark_2.0.2_hadoop_2.7:
-  stage: one-two 
+  stage: one-two
   <<: *build_env
   before_script:
     - export SPARK_VERSION=2.0.2
     - export HADOOP_VERSION=2.7
 
 build_spark_2.1.1_hadoop_2.7:
-  stage: one-two 
+  stage: one-two
   <<: *build_env
   before_script:
     - export SPARK_VERSION=2.1.1
@@ -105,5 +104,4 @@ build_spark_3.0.0_hadoop_3.2:
   before_script:
     - export SPARK_VERSION=3.0.0
     - export HADOOP_VERSION=3.2
-
 
