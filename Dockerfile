@@ -29,4 +29,4 @@ RUN sudo chmod u+x /usr/bin/start-worker
 RUN sudo chmod u+x /usr/bin/start-master
 RUN sudo chmod u+x /usr/bin/setup-users
 
-RUN mkdir /ssh-keys
+RUN sudo mkdir /ssh-keys
