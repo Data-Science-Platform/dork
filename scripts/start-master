@@ -38,7 +38,7 @@ then
   if [ -d "$SPARK_MASTER_RECOVERY_DIRECTORY" ]
   then
     export SPARK_DAEMON_JAVA_OPTS="-Dspark.deploy.recoveryMode=FILESYSTEM -Dspark.deploy.recoveryDirectory=$SPARK_MASTER_RECOVERY_DIRECTORY"
-    chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_MASTER_RECOVERY_DIRECTORY"
+    sudo chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_MASTER_RECOVERY_DIRECTORY"
   else
     echo "SPARK_MASTER_RECOVERY_DIRECTORY=$SPARK_MASTER_RECOVERY_DIRECTORY is not a directory"
     exit 1
@@ -48,7 +48,7 @@ fi
 echo "using master opts: $SPARK_MASTER_OPTS"
 echo "using deamon java opts: $SPARK_DAEMON_JAVA_OPTS"
 
-chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_HOME"
+sudo chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_HOME"
 
 exec sudo -E -u "$SPARK_USER_NAME" "$SPARK_HOME"/bin/spark-class org.apache.spark.deploy.master.Master \
     --ip "$SPARK_MASTER_IP" \
