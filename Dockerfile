@@ -3,7 +3,7 @@ FROM internal.docker.gda.allianz/bionic-20210222-non-root:jre8-anaconda3-2020.11
 ENV LANG "C.UTF-8"
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt install sssd-tools libsss-sudo -y
+RUN sudo apt install sssd-tools libsss-sudo -y
 
 ADD nsswitch.conf /etc/nsswitch.conf
 
