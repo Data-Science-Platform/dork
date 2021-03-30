@@ -22,11 +22,11 @@ COPY scripts/start-worker /usr/bin
 COPY scripts/start-master /usr/bin
 COPY scripts/setup-users /usr/bin
 
-RUN sudo chmod u+x /usr/bin/dork-submit
-RUN sudo chmod u+x /usr/bin/dork-shell
-RUN sudo chmod u+x /usr/bin/start-history-server
-RUN sudo chmod u+x /usr/bin/start-worker
-RUN sudo chmod u+x /usr/bin/start-master
-RUN sudo chmod u+x /usr/bin/setup-users
+RUN sudo chmod +x /usr/bin/dork-submit
+RUN sudo chmod +x /usr/bin/dork-shell
+RUN sudo chmod +x /usr/bin/start-history-server
+RUN sudo chmod +x /usr/bin/start-worker
+RUN sudo chmod +x /usr/bin/start-master
+RUN sudo chmod +x /usr/bin/setup-users
 
 RUN sudo mkdir /ssh-keys
