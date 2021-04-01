@@ -27,10 +27,10 @@ fi
 
 setup-users
 
-echo "" >> "$SPARK_HOME"/conf/spark-env.sh
-echo "umask $SPARK_WORKER_UMASK" >> "$SPARK_HOME"/conf/spark-env.sh
+echo "" | sudo tee -a "$SPARK_HOME"/conf/spark-env.sh
+echo "umask $SPARK_WORKER_UMASK" | sudo tee -a "$SPARK_HOME"/conf/spark-env.sh
 
-echo "SPARK_EXECUTOR_JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=1000" >> "$SPARK_HOME"/conf/spark-env.sh
+echo "SPARK_EXECUTOR_JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=1000" | sudo tee -a "$SPARK_HOME"/conf/spark-env.sh
 
 export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.driver.port=$SPARK_PORT_DRIVER \
 -Dspark.fileserver.port=$SPARK_PORT_FILESERVER \
