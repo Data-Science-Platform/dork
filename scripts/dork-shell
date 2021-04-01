@@ -6,12 +6,12 @@ then
   exit 1
 fi
 
-envsubst < /etc/ssh/sshd_config.template > /etc/ssh/sshd_config
+envsubst < /etc/ssh/sshd_config.template | sudo tee /etc/ssh/sshd_config
 
 echo "alias sudo='fortune && true'" >> /etc/bash.bashrc
 echo "export PATH=$PATH:/spark/bin:/usr/games" >> /etc/bash.bashrc
 
-chmod 777 /application
+sudo chmod 777 /application
 
 _term() {
   echo "Terminating!"
@@ -26,7 +26,7 @@ _kill() {
 trap _term SIGINT
 trap _term SIGTERM
 
-/usr/sbin/sshd -D -e &
+sudo /usr/sbin/sshd -D -e &
 
 child=$!
 wait "$child"
