@@ -1,48 +1,20 @@
-FROM ubuntu:14.04
+FROM internal.docker.gda.allianz/bionic-20210222-non-root:jre8-anaconda3-2020.11
 
-RUN \
-  sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
-  apt-get update && \
-  apt-get install -y software-properties-common && \
-  add-apt-repository ppa:openjdk-r/ppa && \
-  apt-get update && \
-  apt-get install -y \
-    openjdk-8-jdk-headless \
-    curl \
-    grep \
-    sed \
-    git \
-    wget \
-    bzip2 \
-    gzip \
-    zip unzip \
-    gettext \
-    sudo \
-    ca-certificates \
-    libglib2.0-0 \
-    libxext6 \
-    libsm6 \
-    fortune \
-    libxrender1 \
-    libnss-ldap ldap-utils \
-    openssh-server && \
-  apt-get clean all
+ENV LANG "C.UTF-8"
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
-  wget --quiet https://repo.continuum.io/archive/Anaconda3-4.2.0-Linux-x86_64.sh -O ~/anaconda.sh && \
-  /bin/bash ~/anaconda.sh -b -p /opt/conda && \
-  rm ~/anaconda.sh
-  
-RUN mkdir /var/run/sshd
-  
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+RUN sudo apt clean
+RUN sudo apt update
+RUN sudo apt install sssd-tools libsss-sudo -y
 
-RUN rm -f /usr/bin/python && ln -s /opt/conda/bin/python /usr/bin/python
+ADD nsswitch.conf /etc/nsswitch.conf
+
+RUN sudo mkdir -p /var/run/sshd
 
 ADD spark /spark
 
-RUN mkdir /application
-RUN chmod 777 /application
+RUN sudo mkdir /application
+RUN sudo chmod 777 /application
 
 ENV SPARK_HOME /spark
 ENV PATH $PATH:/spark/bin
@@ -56,11 +28,11 @@ COPY scripts/start-worker /usr/bin
 COPY scripts/start-master /usr/bin
 COPY scripts/setup-users /usr/bin
 
-RUN chmod u+x /usr/bin/dork-submit
-RUN chmod u+x /usr/bin/dork-shell
-RUN chmod u+x /usr/bin/start-history-server
-RUN chmod u+x /usr/bin/start-worker
-RUN chmod u+x /usr/bin/start-master
-RUN chmod u+x /usr/bin/setup-users
+RUN sudo chmod +x /usr/bin/dork-submit
+RUN sudo chmod +x /usr/bin/dork-shell
+RUN sudo chmod +x /usr/bin/start-history-server
+RUN sudo chmod +x /usr/bin/start-worker
+RUN sudo chmod +x /usr/bin/start-master
+RUN sudo chmod +x /usr/bin/setup-users
 
-RUN mkdir /ssh-keys
+RUN sudo mkdir /ssh-keys

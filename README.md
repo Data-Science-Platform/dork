@@ -6,14 +6,14 @@
 ## Description
 
 Spark Docker image for deploying a stand-alone cluster.
-There are [tags](https://hub.docker.com/r/datascienceplatform/dorkd/tags/) for different Spark versions available.
+There are [tags](https://hub.docker.com/r/datascienceplatform/dorkd/tags/) for different Spark versions available.  Dork container now has SSSD client installed for System Security Services integration with the host machine.  See sssd [documentation](https://sssd.io/).
 
 ## Usage
 
 ### Starting a Master
 
-```
-sudo docker run --net host \
+```sh
+docker run --net host \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/timezone:/etc/timezone:ro \
   -e SPARK_MASTER_IP=localhost \
@@ -37,8 +37,8 @@ sudo docker run --net host \
 
 ### Starting a Worker
 
-```
-sudo docker run -d --net host \
+```sh
+docker run -d --net host \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/timezone:/etc/timezone:ro \
   -e SPARK_WORKER_CORES=2 \
@@ -60,13 +60,16 @@ sudo docker run -d --net host \
   -e SPARK_SHUFFLE_SERVICE_ENABLED=true \
   -e SPARK_SHUFFLE_SERVICE_PORT=7337 \
   -e SPARK_EVENT_LOG_DIR=/tmp/spark-events \
+  -e $SPARK_WORKER_CLEANUP_ENABLED=true \
+  -e $SPARK_WORKER_CLEANUP_INTERVAL=1800 \
+  -e $SPARK_WORKER_CLEANUP_APPDATATTL=604800 \
   datascienceplatform/dorkd:latest-s2.0.2-h2.7 start-worker
 ```
 
 ### Starting a History Server
 
-```
-sudo docker run -d --net host \
+```sh
+docker run -d --net host \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/timezone:/etc/timezone:ro \
   -e SPARK_EVENT_LOG_DIR=/tmp/spark-events \
@@ -80,6 +83,7 @@ sudo docker run -d --net host \
   -e SPARK_GROUP_ID=1100 \
   datascienceplatform/dorkd:latest-s2.0.2-h2.7 start-history-server
 ```
+
 ### Disabling logs after the event
 
 By default, the after-the-event logs for Spark History server are stored under `$SPARK_EVENT_LOG_DIR`. If the variable is not specified, writing of the logs is omitted.
@@ -87,8 +91,8 @@ By default, the after-the-event logs for Spark History server are stored under `
 
 ### Submitting an Application
 
-```
-sudo docker run -d --net host \
+```sh
+docker run -d --net host \
   --entrypoint dork-submit \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/timezone:/etc/timezone:ro \
@@ -109,7 +113,7 @@ sudo docker run -d --net host \
 
 ### Providing a Spark SSH
 
-```
+```sh
 sudo docker run -d -p 8022:22 \
   --entrypoint dork-shell \
   -v $(pwd)/ssh-keys:/ssh-keys \

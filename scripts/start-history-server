@@ -18,11 +18,13 @@ setup-users
 export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS \
 -Dspark.history.fs.update.interval=$SPARK_HISTORY_SERVER_UPDATE_INTERVAL \
 -Dspark.history.ui.port=$SPARK_HISTORY_SERVER_PORT \
--Dspark.history.store.maxDiskUsage=$SPARK_HISTORY_SERVER_MAX_DISK_USAGE"
+-Dspark.history.store.maxDiskUsage=$SPARK_HISTORY_SERVER_MAX_DISK_USAGE \
+-XX:+UseG1GC \
+-XX:MaxGCPauseMillis=1000"
 
 if [ "$SPARK_EVENT_LOG_DIR" ] && [ -d "$SPARK_EVENT_LOG_DIR" ]
 then
-    chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_EVENT_LOG_DIR"
+    sudo chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_EVENT_LOG_DIR"
 
     # make sure local dir gets a 'file://' prefix
     if [[ "$SPARK_EVENT_LOG_DIR" == /* ]]; then SPARK_EVENT_LOG_DIR="file://$SPARK_EVENT_LOG_DIR"; fi
@@ -42,6 +44,6 @@ fi
 
 echo "using history opts: $SPARK_HISTORY_OPTS"
 
-chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_HOME"
+sudo chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_HOME"
 
 exec sudo -E -u "$SPARK_USER_NAME" "$SPARK_HOME"/bin/spark-class org.apache.spark.deploy.history.HistoryServer "$@"
