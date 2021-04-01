@@ -31,9 +31,12 @@ setup-users
 
 echo "adding configuration to $SPARK_HOME/conf/spark-env.sh"
 
-id
+echo "User id without sudo: $(id)"
 
-sudo id
+echo "User id with sudo: $(sudo id)"
+
+echo "Sudoers:"
+sudo cat /etc/sudoers
 
 echo "" | sudo tee -a "$SPARK_HOME"/conf/spark-env.sh
 echo "umask $SPARK_WORKER_UMASK" | sudo tee -a "$SPARK_HOME"/conf/spark-env.sh
