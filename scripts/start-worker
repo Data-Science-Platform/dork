@@ -25,12 +25,21 @@ then
   exit 1
 fi
 
+echo "running setup-users"
+
 setup-users
 
-echo "" >> "$SPARK_HOME"/conf/spark-env.sh
-echo "umask $SPARK_WORKER_UMASK" >> "$SPARK_HOME"/conf/spark-env.sh
+echo "adding configuration to $SPARK_HOME/conf/spark-env.sh"
 
-echo "SPARK_EXECUTOR_JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=1000" >> "$SPARK_HOME"/conf/spark-env.sh
+echo "User id without sudo: $(id)"
+
+echo "User id with sudo: $(sudo id)"
+
+echo "" | sudo tee -a "$SPARK_HOME"/conf/spark-env.sh
+echo "umask $SPARK_WORKER_UMASK" | sudo tee -a "$SPARK_HOME"/conf/spark-env.sh
+echo "SPARK_EXECUTOR_JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=1000" | sudo tee -a "$SPARK_HOME"/conf/spark-env.sh
+
+echo "exporting SPARK_WORKER_OPTS"
 
 export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.driver.port=$SPARK_PORT_DRIVER \
 -Dspark.fileserver.port=$SPARK_PORT_FILESERVER \
@@ -44,22 +53,26 @@ export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.driver.port=$SPARK_PORT_DRI
 -XX:+UseG1GC \
 -XX:MaxGCPauseMillis=1000"
 
-echo "checking event log dir $SPARK_EVENT_LOG_DIR"
-if [ "$SPARK_EVENT_LOG_DIR" ] && [ -d "$SPARK_EVENT_LOG_DIR" ]
-then
-    sudo chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_EVENT_LOG_DIR"
+echo "$SPARK_WORKER_OPTS"
 
+echo "checking event log dir $SPARK_EVENT_LOG_DIR"
+
+if [ "$SPARK_EVENT_LOG_DIR" ] && [ -d "$SPARK_EVENT_LOG_DIR" ]; then
+
+    sudo chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_EVENT_LOG_DIR"
     # make sure local dir gets a 'file://' prefix
     if [[ "$SPARK_EVENT_LOG_DIR" == /* ]]; then SPARK_EVENT_LOG_DIR="file://$SPARK_EVENT_LOG_DIR"; fi
-
     export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.eventLog.enabled=true -Dspark.eventLog.dir=$SPARK_EVENT_LOG_DIR"
+
 else
+
     echo "skip history config"
+
 fi
 
 echo "checking worker cleanup parameter $SPARK_WORKER_CLEANUP_ENABLED"
-if [ "$SPARK_WORKER_CLEANUP_ENABLED" == "true" ]
-then
+
+if [ "$SPARK_WORKER_CLEANUP_ENABLED" == "true" ]; then
     export SPARK_WORKER_OPTS="$SPARK_WORKER_OPTS -Dspark.worker.cleanup.enabled=true"
     if [ "$SPARK_WORKER_CLEANUP_INTERVAL" ]
     then
