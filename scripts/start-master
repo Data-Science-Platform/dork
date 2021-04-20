@@ -50,11 +50,7 @@ echo "using deamon java opts: $SPARK_DAEMON_JAVA_OPTS"
 
 sudo chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_HOME"
 
-echo "Trying to sudo to Spark user:"
-
-sudo -u "$SPARK_USER_NAME" id
-
-exec sudo -E -u "$SPARK_USER_NAME" "$SPARK_HOME"/bin/spark-class org.apache.spark.deploy.master.Master \
+exec sudo -E -u "$SPARK_USER_NAME" /usr/bin/sg "$SPARK_GROUP_NAME" "$SPARK_HOME"/bin/spark-class org.apache.spark.deploy.master.Master \
     --ip "$SPARK_MASTER_IP" \
     --port "$SPARK_MASTER_PORT" \
     --webui-port "$SPARK_MASTER_WEBUI_PORT" \
