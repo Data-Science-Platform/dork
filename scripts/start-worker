@@ -89,6 +89,8 @@ echo "using worker opts: $SPARK_WORKER_OPTS"
 sudo chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_HOME"
 
 echo "Trying to sudo to Spark user:"
+echo "sudo -u $SPARK_USER_NAME id"
+echo "Sudo worked"
 
 sudo -u "$SPARK_USER_NAME" id
 
