@@ -1,3 +1,4 @@
+Defaults    requiretty
 root    ALL=(ALL:ALL) ALL
 %admin ALL=(ALL) ALL
 %sudo   ALL=(ALL:ALL) ALL
