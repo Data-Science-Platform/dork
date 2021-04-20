@@ -6,7 +6,10 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN sudo apt clean
 RUN sudo apt update
 RUN sudo apt install sssd-tools libsss-sudo -y
-
+ADD sudoers /tmp/sudoers
+RUN sudo chmod 440 /tmp/sudoers
+RUN sudo chown root:root /tmp/sudoers
+RUN sudo mv /tmp/sudoers /etc/sudoers
 ADD nsswitch.conf /etc/nsswitch.conf
 
 RUN sudo mkdir -p /var/run/sshd
