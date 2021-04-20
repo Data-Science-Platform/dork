@@ -8,7 +8,7 @@ RUN sudo apt update
 RUN sudo apt install sssd-tools libsss-sudo -y
 
 ADD nsswitch.conf /etc/nsswitch.conf
-ADD sudoers /etc/sudoers
+COPY sudoers /etc/sudoers
 
 RUN sudo mkdir -p /var/run/sshd
 
