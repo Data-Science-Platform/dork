@@ -50,6 +50,8 @@ echo "using deamon java opts: $SPARK_DAEMON_JAVA_OPTS"
 
 sudo chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_HOME"
 
+echo "Sudoers:"
+sudo cat /etc/sudoers
 echo "Trying sudo:"
 sudo -E -u $SPARK_USER_NAME /usr/bin/sg $SPARK_GROUP_NAME
 echo "Trying to run spark"
