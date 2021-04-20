@@ -32,7 +32,11 @@ RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
 RUN rm -f /usr/bin/python && ln -s /opt/conda/bin/python /usr/bin/python
 
 RUN useradd -m -u 5000 app || :
-RUN echo 'app ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+COPY sudoers /etc/sudoers
+RUN chmod 400 /etc/sudoers
+RUN chown root:root /etc/sudoers
+# RUN echo 'app ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 RUN mkdir /var/run/sshd
 
