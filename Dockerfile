@@ -7,7 +7,7 @@ RUN sudo apt clean
 RUN sudo apt update
 RUN sudo apt install sssd-tools libsss-sudo -y
 
-RUN cat /etc/sudoers
+RUN sudo cat /etc/sudoers
 
 ADD sudoers /tmp/sudoers
 RUN sudo chmod 440 /tmp/sudoers
