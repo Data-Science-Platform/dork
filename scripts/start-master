@@ -52,9 +52,6 @@ sudo chown -R "$SPARK_USER_NAME":"$SPARK_GROUP_NAME" "$SPARK_HOME"
 
 echo "Sudoers:"
 sudo cat /etc/sudoers
-echo "Trying sudo:"
-sudo -E -u $SPARK_USER_NAME /usr/bin/sg $SPARK_GROUP_NAME
-echo "Trying to run spark"
 
 echo "exec sudo -E -u $SPARK_USER_NAME /usr/bin/sg $SPARK_GROUP_NAME $SPARK_HOME/bin/spark-class org.apache.spark.deploy.master.Master \
     --ip $SPARK_MASTER_IP \
@@ -62,10 +59,11 @@ echo "exec sudo -E -u $SPARK_USER_NAME /usr/bin/sg $SPARK_GROUP_NAME $SPARK_HOME
     --webui-port $SPARK_MASTER_WEBUI_PORT \
     $@"
 
-
-exec sudo -E -u "$SPARK_USER_NAME" /usr/bin/sg "$SPARK_GROUP_NAME" "$SPARK_HOME"/bin/spark-class org.apache.spark.deploy.master.Master \
+exec sudo -E -u "$SPARK_USER_NAME" /usr/bin/newgrp "$SPARK_GROUP_NAME" <<EONG
+"$SPARK_HOME"/bin/spark-class org.apache.spark.deploy.master.Master \
     --ip "$SPARK_MASTER_IP" \
     --port "$SPARK_MASTER_PORT" \
     --webui-port "$SPARK_MASTER_WEBUI_PORT" \
     "$@"
+EONG
 
