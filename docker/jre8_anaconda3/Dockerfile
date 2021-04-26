@@ -1,7 +1,6 @@
 FROM ubuntu:bionic-20210222
 
-RUN apt-get clean && apt-get update
-RUN apt-get install --reinstall ca-certificates -y
+RUN apt-get clean && apt-get update && apt-get install --reinstall ca-certificates -y
 
 RUN apt-get install sudo apt-transport-https wget -y
 
@@ -34,9 +33,7 @@ RUN rm -f /usr/bin/python && ln -s /opt/conda/bin/python /usr/bin/python
 RUN useradd -m -u 5000 app || :
 
 COPY sudoers /etc/sudoers
-RUN chmod 400 /etc/sudoers
-RUN chown root:root /etc/sudoers
-# RUN echo 'app ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+RUN chmod 400 /etc/sudoers && chown root:root /etc/sudoers
 
 RUN mkdir /var/run/sshd
 

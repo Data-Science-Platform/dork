@@ -3,16 +3,12 @@ FROM internal.docker.gda.allianz/bionic-20210222-non-root:jre8-anaconda3-2020.11
 ENV LANG "C.UTF-8"
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN sudo apt clean
-RUN sudo apt update
-RUN sudo apt install sssd-tools libsss-sudo -y
+RUN sudo apt clean && sudo apt update && sudo apt install sssd-tools libsss-sudo -y
 
 RUN sudo cat /etc/sudoers
 
 ADD sudoers /tmp/sudoers
-RUN sudo chmod 440 /tmp/sudoers
-RUN sudo chown root:root /tmp/sudoers
-RUN sudo mv /tmp/sudoers /etc/sudoers
+RUN sudo chmod 440 /tmp/sudoers && sudo chown root:root /tmp/sudoers && sudo mv /tmp/sudoers /etc/sudoers
 
 ADD nsswitch.conf /etc/nsswitch.conf
 
@@ -20,8 +16,7 @@ RUN sudo mkdir -p /var/run/sshd
 
 ADD spark /spark
 
-RUN sudo mkdir /application
-RUN sudo chmod 777 /application
+RUN sudo mkdir /application && sudo chmod 777 /application
 
 ENV SPARK_HOME /spark
 ENV PATH $PATH:/spark/bin
