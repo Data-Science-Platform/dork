@@ -1,17 +1,28 @@
 #!/bin/bash
 
-# add spark group if not exists
-if getent group $SPARK_GROUP_NAME; then
-  echo "Group $SPARK_GROUP_NAME already exists"
-else
-  echo "Group $SPARK_GROUP_NAME does not exist, creating it with gid=$SPARK_GROUP_ID"
-  addgroup --force-badname -gid $SPARK_GROUP_ID $SPARK_GROUP_NAME
-fi
+set -xe
+
+sleep 20
+
+id -u "$SPARK_USER_NAME" && echo 'id found' || echo 'id not found there is like to be a problem with LDAP'
+
+getent group "$SPARK_GROUP_NAME" && echo 'group id found' || echo 'group id not found there is like to be a problem with LDAP'
+
+date +'%Y-%m-%d:%H:%m:%S'
+
+
+# # add spark group if not exists
+# if getent group $SPARK_GROUP_NAME; then
+#   echo "Group $SPARK_GROUP_NAME already exists"
+# else
+#   echo "Group $SPARK_GROUP_NAME does not exist, creating it with gid=$SPARK_GROUP_ID"
+#   addgroup --force-badname -gid $SPARK_GROUP_ID $SPARK_GROUP_NAME
+# fi
 
 # add spark user if not exists
-if id -u $SPARK_USER_NAME 2>/dev/null; then
-  echo "User $SPARK_USER_NAME already exists"
-else
-  echo "User $SPARK_USER_NAME does not exist, creating it with uid=$SPARK_USER_ID"
-  adduser --force-badname $SPARK_USER_NAME --uid $SPARK_USER_ID --gecos "" --ingroup $SPARK_GROUP_NAME --disabled-login --disabled-password
-fi 
+# if id -u $SPARK_USER_NAME 2>/dev/null; then
+#   echo "User $SPARK_USER_NAME already exists"
+# else
+#   echo "User $SPARK_USER_NAME does not exist, creating it with uid=$SPARK_USER_ID"
+#   adduser --force-badname $SPARK_USER_NAME --uid $SPARK_USER_ID --gecos "" --ingroup $SPARK_GROUP_NAME --disabled-login --disabled-password
+# fi 
