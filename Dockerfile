@@ -3,14 +3,15 @@ FROM internal.docker.gda.allianz/bionic-20210222-non-root:jre8-anaconda3-2020.11
 ENV LANG "C.UTF-8"
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN sudo cat /etc/sudoers
+ADD sudoers /tmp/sudoers
+RUN sudo chmod 440 /tmp/sudoers && sudo chown root:root /tmp/sudoers && sudo mv /tmp/sudoers /etc/sudoers
 
 RUN sudo apt clean && sudo apt update && sudo apt install sssd-tools libsss-sudo -y
 
-RUN sudo cat /etc/sudoers
-
 ADD sudoers /tmp/sudoers
 RUN sudo chmod 440 /tmp/sudoers && sudo chown root:root /tmp/sudoers && sudo mv /tmp/sudoers /etc/sudoers
+
+RUN sudo cat /etc/sudoers
 
 ADD nsswitch.conf /etc/nsswitch.conf
 
